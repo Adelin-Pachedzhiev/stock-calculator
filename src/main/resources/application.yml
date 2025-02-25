@@ -1,0 +1,5 @@
+spring.application.name: stock-calculator
+stock:
+  api:
+    url: https://finnhub.io/api/v1
+    api-key: cum3dupr01qovv71b40gcum3dupr01qovv71b410
