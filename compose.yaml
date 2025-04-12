@@ -1,1 +1,39 @@
 services:
+
+  app:
+    build: .
+    container_name: my-spring-app
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: example
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    #    ports:
+    #      - "8081:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+    depends_on:
+      - adminer
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8090:8080"

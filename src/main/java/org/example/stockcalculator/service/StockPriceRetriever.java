@@ -24,7 +24,7 @@ public class StockPriceRetriever {
         String url = UriComponentsBuilder.fromUriString(stockApiProperties.url())
                 .path("/quote")
                 .queryParam("symbol", symbol)
-//                .queryParam("token", stockApiProperties.apiKey())
+                .queryParam("token", stockApiProperties.apiKey())
                 .encode().toUriString();
         try {
             StockPrice response = restTemplate.getForObject(url, StockPrice.class);
