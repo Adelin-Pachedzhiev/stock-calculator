@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class StockCalculatorApplication {
 
     public static void main(String[] args) {
+        System.out.println("ENV: " + System.getenv());
         SpringApplication.run(StockCalculatorApplication.class, args);
     }
 

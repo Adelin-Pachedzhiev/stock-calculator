@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TestCalculator {
 
-    private final StockPriceRetriever stockPriceRetriever;
+    private final StockPriceApiClient stockPriceApiClient;
     private final StockPriceCalculator stockPriceCalculator;
     private final JdbcTemplate jdbcTemplate;
 
@@ -20,7 +20,7 @@ public class TestCalculator {
     public void test() {
         for (int i = 0; i < 5; i++) {
 
-            StockPrice aapl = stockPriceRetriever.retrieve("AAPL").orElseThrow();
+            StockPrice aapl = stockPriceApiClient.getPriceForSymbol("AAPL").orElseThrow();
             StockPrice oldStockPrice = new StockPrice(244.87);
 
             StockProfit calculate = stockPriceCalculator.calculate(aapl, oldStockPrice);

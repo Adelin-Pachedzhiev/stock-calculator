@@ -14,12 +14,12 @@ import java.util.Optional;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class StockPriceRetriever {
+public class StockPriceApiClientImpl implements StockPriceApiClient{
 
     private final RestTemplate restTemplate;
     private final StockApiProperties stockApiProperties;
 
-    public Optional<StockPrice> retrieve(String symbol) {
+    public Optional<StockPrice> getPriceForSymbol(String symbol) {
 
         String url = UriComponentsBuilder.fromUriString(stockApiProperties.url())
                 .path("/quote")
