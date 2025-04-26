@@ -1,6 +1,6 @@
 package org.example.stockcalculator.entity;
 
-enum TransactionType {
+public enum TransactionType {
     BUY, SELL
 }
 
