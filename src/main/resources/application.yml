@@ -1,11 +1,10 @@
 spring:
   application.name: stock-calculator
-  sql.init.mode: always
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 stock:
   api:
     url: https://finnhub.io/api/v1
-    api-key: "cum3dupr01qovv71b40gcum3dupr01qovv71b410"
+    api-key: ${FINNHUB_API_KEY}

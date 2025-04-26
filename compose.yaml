@@ -8,8 +8,9 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: example
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      FINNHUB_API_KEY: ${FINNHUB_API_KEY}
     depends_on:
       - db
   db:
@@ -27,8 +28,10 @@ services:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     #    ports:
     #      - "8081:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - adminer
 
@@ -37,3 +40,5 @@ services:
     restart: always
     ports:
       - "8090:8080"
+volumes:
+  postgres_data:
