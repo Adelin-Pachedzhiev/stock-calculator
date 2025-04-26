@@ -25,20 +25,27 @@ public class StockPricePersister {
     private final StockPriceRepository stockPriceRepository;
     private final StockRepository stockRepository;
 
-    @Scheduled(fixedRate = 6, timeUnit = SECONDS)
+    @Scheduled(fixedRate = 8, timeUnit = SECONDS)
     public void persistStockPrice() {
         List<Stock> supportedStocks = stockRepository.findAll();
-        log.info("Supported stocks: {}", supportedStocks.stream().map(Stock::getName).toList());
-        supportedStocks.forEach(stock -> {
-            StockPrice stockPriceFromApi = stockPriceApiClient.getPriceForSymbol(stock.getSymbol()).orElseThrow();
+//        log.info("Supported stocks: {}", supportedStocks.stream().map(Stock::getSymbol).toList());
+        supportedStocks.forEach(this::getPriceAndSaveToDb);
+    }
 
-            StockPriceEntity stockPriceEntity = new StockPriceEntity();
-            stockPriceEntity.setStock(stock);
-            stockPriceEntity.setPrice(stockPriceFromApi.currentPrice());
-            stockPriceEntity.setTimestamp(LocalDateTime.now());
+    private void getPriceAndSaveToDb(Stock stock) {
+        stockPriceApiClient.getPriceForSymbol(stock.getSymbol())
+                .map(price -> createStockPriceEntity(stock, price))
+                .ifPresent(priceEntity -> {
+                    stockPriceRepository.save(priceEntity);
+//                    log.info("Saved stock price {} for stock {}", priceEntity.getPrice(), stock.getName());
+                });
+    }
 
-
-            stockPriceRepository.save(stockPriceEntity);
-        });
+    private StockPriceEntity createStockPriceEntity(Stock stock, StockPrice price) {
+        StockPriceEntity stockPriceEntity = new StockPriceEntity();
+        stockPriceEntity.setStock(stock);
+        stockPriceEntity.setPrice(price.currentPrice());
+        stockPriceEntity.setTimestamp(LocalDateTime.now());
+        return stockPriceEntity;
     }
 }
