@@ -16,10 +16,10 @@ public record CreateTransactionRequest(
 
         @NotNull(message = "You need to specify a quantity")
         @Positive(message = "Quantity must be positive")
-        Integer quantity,
+        Double quantity,
 
         @NotNull(message = "You need to provide a price per unit")
-        Double pricePerUnit,
+        Double price,
 
         Double fee,
 
