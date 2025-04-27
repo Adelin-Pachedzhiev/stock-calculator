@@ -1,7 +1,5 @@
 package org.example.stockcalculator.controller;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-
 import org.example.stockcalculator.dto.CreateTransactionRequest;
 import org.example.stockcalculator.service.StockTransactionService;
 import org.springframework.web.bind.annotation.PostMapping;
