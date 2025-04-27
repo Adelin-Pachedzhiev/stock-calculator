@@ -13,17 +13,16 @@ import org.springframework.stereotype.Component;
 public class TestCalculator {
 
     private final StockPriceApiClient stockPriceApiClient;
-    private final StockPriceCalculator stockPriceCalculator;
+    private final StockProfitService stockProfitService;
     private final JdbcTemplate jdbcTemplate;
 
-    //    @Scheduled(fixedRate = 6, timeUnit = TimeUnit.SECONDS)
     public void test() {
         for (int i = 0; i < 5; i++) {
 
             StockPrice aapl = stockPriceApiClient.getPriceForSymbol("AAPL").orElseThrow();
             StockPrice oldStockPrice = new StockPrice(244.87);
 
-            StockProfit calculate = stockPriceCalculator.calculate(aapl, oldStockPrice);
+            StockProfit calculate = stockProfitService.calculate(aapl, oldStockPrice);
             log.info("Profit: {}, Profit percentage: {}", calculate.profit(), calculate.profitPercentage());
             jdbcTemplate.execute("SELECT 1");
         }
