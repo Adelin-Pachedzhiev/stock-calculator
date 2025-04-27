@@ -30,7 +30,7 @@ public class StockPriceApiClientImpl implements StockPriceApiClient{
             StockPrice response = restTemplate.getForObject(url, StockPrice.class);
             return Optional.ofNullable(response);
         } catch (RestClientException e) {
-            log.error("Failed to retrieve stock price for symbol: {}", symbol, e);
+            log.warn("Failed to retrieve stock price for symbol: {}", symbol, e);
             return Optional.empty();
         }
     }
