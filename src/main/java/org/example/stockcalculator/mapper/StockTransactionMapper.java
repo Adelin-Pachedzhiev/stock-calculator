@@ -10,7 +10,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = SPRING)
 public interface StockTransactionMapper {
 
-    @Mapping(source = "pricePerUnit", target = "price")
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "stockId", target = "stock.id")
     StockTransaction toEntity(CreateTransactionRequest dto);
