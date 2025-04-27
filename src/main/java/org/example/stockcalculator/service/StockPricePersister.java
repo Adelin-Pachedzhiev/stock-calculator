@@ -35,7 +35,12 @@ public class StockPricePersister {
 
     private void persistStockPricesForever() {
         while (!Thread.currentThread().isInterrupted()) {
-            getStocksAndPersistTheirPrices();
+            try {
+                getStocksAndPersistTheirPrices();
+            }
+            catch (Exception e) {
+                log.error("Error occurred while persisting stock prices: {}", e.getMessage(), e);
+            }
         }
     }
 
