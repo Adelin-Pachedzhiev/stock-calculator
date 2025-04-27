@@ -27,6 +27,7 @@ public class StockTransaction {
 
     private LocalDateTime timestamp;
     private Double price;
+    private Double quantity;
     private Double fee;
 
     @Enumerated(EnumType.STRING)
