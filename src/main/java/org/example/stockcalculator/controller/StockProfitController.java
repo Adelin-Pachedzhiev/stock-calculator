@@ -14,13 +14,19 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/stock-profit")
+@RequestMapping("/api/stock/profit")
 @RequiredArgsConstructor
 public class StockProfitController {
+
     private final StockProfitService stockProfitService;
 
-    @GetMapping("/")
+    @GetMapping
     public Map<String, StockProfit> calculate(@Valid @NotNull @RequestParam Long userId) {
-        return stockProfitService.calculate(userId);
+        return stockProfitService.calculateProfitPerStock(userId);
+    }
+
+    @GetMapping("/total")
+    public StockProfit calculateTotalProfit(@Valid @NotNull @RequestParam Long userId) {
+        return stockProfitService.calculateTotalProfit(userId);
     }
 }

@@ -1,6 +1,15 @@
 package org.example.stockcalculator.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.example.stockcalculator.entity.Stock;
+import org.example.stockcalculator.entity.StockPriceEntity;
+import org.example.stockcalculator.model.StockPrice;
 import org.example.stockcalculator.repository.StockPriceRepository;
+import org.example.stockcalculator.repository.StockRepository;
+import org.example.stockcalculator.service.StockPriceService;
+import org.example.stockcalculator.service.StockProfitService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +22,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StockInformationController {
 
-    public final StockPriceRepository stockPriceRepository;
+    public final StockRepository stockRepository;
+    public final StockPriceService stockPriceService;
 
     @GetMapping("/currentPrice/{stockSymbol}")
-    public double getCurrentPrice(@PathVariable String stockSymbol){
-        // todo create dto
-        return stockPriceRepository.findTopByStockSymbolOrderByTimestampDesc(stockSymbol).getPrice();
+    public Optional<StockPrice> getCurrentPrice(@PathVariable String stockSymbol) {
+        return stockPriceService.getCurrentPrice(stockSymbol);
     }
+
+    @GetMapping("/availableStocks")
+    public List<Stock> getAvailableStocks() {
+        return stockRepository.findAll();
+    }
+
 }

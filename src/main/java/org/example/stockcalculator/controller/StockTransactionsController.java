@@ -17,7 +17,7 @@ public class StockTransactionsController {
 
     private final StockTransactionService stockTransactionService;
 
-    @PostMapping("/")
+    @PostMapping
     public void createTransaction(@RequestBody @Valid CreateTransactionRequest request) {
         stockTransactionService.saveStockTransaction(request);
     }

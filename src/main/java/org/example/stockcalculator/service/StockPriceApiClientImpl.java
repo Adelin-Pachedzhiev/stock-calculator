@@ -3,7 +3,7 @@ package org.example.stockcalculator.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.stockcalculator.config.StockApiProperties;
-import org.example.stockcalculator.model.StockPrice;
+import org.example.stockcalculator.model.StockPriceResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +19,7 @@ public class StockPriceApiClientImpl implements StockPriceApiClient{
     private final RestTemplate restTemplate;
     private final StockApiProperties stockApiProperties;
 
-    public Optional<StockPrice> getPriceForSymbol(String symbol) {
+    public Optional<StockPriceResponse> getPriceForSymbol(String symbol) {
 
         String url = UriComponentsBuilder.fromUriString(stockApiProperties.url())
                 .path("/quote")
@@ -27,7 +27,7 @@ public class StockPriceApiClientImpl implements StockPriceApiClient{
                 .queryParam("token", stockApiProperties.apiKey())
                 .encode().toUriString();
         try {
-            StockPrice response = restTemplate.getForObject(url, StockPrice.class);
+            StockPriceResponse response = restTemplate.getForObject(url, StockPriceResponse.class);
             return Optional.ofNullable(response);
         } catch (RestClientException e) {
             log.warn("Failed to retrieve stock price for symbol: {}", symbol, e);

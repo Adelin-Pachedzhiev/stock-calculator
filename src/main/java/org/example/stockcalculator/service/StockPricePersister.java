@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
-import org.example.stockcalculator.model.StockPrice;
+import org.example.stockcalculator.model.StockPriceResponse;
 import org.example.stockcalculator.repository.StockPriceRepository;
 import org.example.stockcalculator.repository.StockRepository;
 import org.springframework.stereotype.Component;
@@ -65,7 +65,7 @@ public class StockPricePersister {
                 .ifPresent(stockPriceRepository::save);
     }
 
-    private StockPriceEntity createStockPriceEntity(Stock stock, StockPrice price) {
+    private StockPriceEntity createStockPriceEntity(Stock stock, StockPriceResponse price) {
         StockPriceEntity stockPriceEntity = new StockPriceEntity();
         stockPriceEntity.setStock(stock);
         stockPriceEntity.setPrice(price.currentPrice());

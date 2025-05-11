@@ -2,9 +2,9 @@ package org.example.stockcalculator.service;
 
 import java.util.Optional;
 
-import org.example.stockcalculator.model.StockPrice;
+import org.example.stockcalculator.model.StockPriceResponse;
 
 public interface StockPriceApiClient {
 
-    Optional<StockPrice> getPriceForSymbol(String symbol);
+    Optional<StockPriceResponse> getPriceForSymbol(String symbol);
 }
