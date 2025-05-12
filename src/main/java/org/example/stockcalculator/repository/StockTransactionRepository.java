@@ -9,7 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface StockTransactionRepository extends JpaRepository<StockTransaction, Long> {
 
-    List<StockTransaction> findByUserIdAndStockSymbolOrderByTimestampAsc(Long user_id, String stockSymbol);
+    List<StockTransaction> findByUserIdAndStockSymbolOrderByTimeOfTransactionAsc(Long user_id, String stockSymbol);
+
+    List<StockTransaction> findByUserIdOrderByTimeOfTransactionAsc(Long user_id);
 
     @Query("SELECT DISTINCT t.stock.symbol FROM StockTransaction t WHERE t.user.id = :userId")
     List<String> findStockSymbolsOfTransactionsByUserId(@Param("userId") Long userId);

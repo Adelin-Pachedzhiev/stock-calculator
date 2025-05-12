@@ -39,7 +39,7 @@ public class StockProfitService {
     }
 
     private StockProfit calculateForUserAndSymbol(Long userId, String stockSymbol) {
-        List<StockTransaction> transactionsForStock = stockTransactionRepository.findByUserIdAndStockSymbolOrderByTimestampAsc(userId, stockSymbol);
+        List<StockTransaction> transactionsForStock = stockTransactionRepository.findByUserIdAndStockSymbolOrderByTimeOfTransactionAsc(userId, stockSymbol);
 
         List<StockTransaction> remainingBuys = new ArrayList<>();
 
