@@ -1,5 +1,6 @@
 package org.example.stockcalculator.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.example.stockcalculator.model.StockProfit;
@@ -21,12 +22,17 @@ public class StockProfitController {
     private final StockProfitService stockProfitService;
 
     @GetMapping
-    public Map<String, StockProfit> calculate(@Valid @NotNull @RequestParam Long userId) {
-        return stockProfitService.calculateProfitPerStock(userId);
+    public List<StockProfitForSymbol> calculate(@Valid @NotNull @RequestParam Long userId) {
+        return stockProfitService.calculateProfitPerStock(userId).entrySet().stream()
+                .map(profit-> new StockProfitForSymbol(profit.getKey(), profit.getValue()))
+                .toList();
     }
 
     @GetMapping("/total")
     public StockProfit calculateTotalProfit(@Valid @NotNull @RequestParam Long userId) {
         return stockProfitService.calculateTotalProfit(userId);
+    }
+
+    public record StockProfitForSymbol(String symbol, StockProfit stockProfit) {
     }
 }
