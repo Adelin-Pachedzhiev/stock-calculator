@@ -27,6 +27,6 @@ public record CreateTransactionRequest(
         TransactionType type,
 
         @NotNull
-        LocalDateTime timestamp
+        LocalDateTime timeOfTransaction
 ) {
 }
