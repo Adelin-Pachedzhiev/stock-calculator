@@ -14,7 +14,7 @@ public class TestUserInitializer {
     private final UserRepository userRepository;
 
     @PostConstruct
-    public void insertDefaultStocks() {
+    public void insertDefaultUser() {
         if (userRepository.count() == 0) {
             User user = new User();
             user.setEmail("test@example.com");
