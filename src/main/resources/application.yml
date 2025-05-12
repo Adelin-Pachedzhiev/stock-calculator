@@ -5,6 +5,10 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 stock:
-  api:
+  prices-api:
     url: https://finnhub.io/api/v1
     api-key: ${FINNHUB_API_KEY}
+  transactions-api:
+    url: https://demo.trading212.com
+    api-key: ${TRANSACTIONS_API_KEY}
+
