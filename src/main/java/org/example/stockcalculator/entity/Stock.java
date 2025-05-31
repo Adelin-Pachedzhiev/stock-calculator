@@ -20,4 +20,8 @@ public class Stock {
     private String symbol;
     private String name;
     private String description;
+
+    public Stock(Long id){
+        this.setId(id);
+    }
 }
