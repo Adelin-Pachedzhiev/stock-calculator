@@ -19,6 +19,7 @@ public record CreateTransactionRequest(
         Double quantity,
 
         @NotNull(message = "You need to provide a price per unit")
+        @Positive(message = "Price must be positive")
         Double price,
 
         Double fee,
