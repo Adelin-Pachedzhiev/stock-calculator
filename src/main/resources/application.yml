@@ -11,4 +11,10 @@ stock:
   transactions-api:
     url: https://demo.trading212.com
     api-key: ${TRANSACTIONS_API_KEY}
+  plaid-api:
+    client-id: ${PLAID_CLIENT_ID}
+    secret: ${PLAID_SECRET}
+    environment: sandbox
+
+
 
