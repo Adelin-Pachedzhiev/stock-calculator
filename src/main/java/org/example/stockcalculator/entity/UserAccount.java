@@ -6,21 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "app_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String givenName;
+    private String familyName;
+    @Column(unique = true)
     private String email;
-    private String password;
+    private String pictureUrl;
 
 
-    public User(Long id){
+    public UserAccount(Long id){
         this.setId(id);
     }
 }

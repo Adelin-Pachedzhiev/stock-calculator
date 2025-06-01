@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
-import org.example.stockcalculator.entity.User;
+import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,7 @@ public class StockTransactionManager {
     private static StockTransaction convertToStockTransactionEntity(StockTransactionsClient.Transaction tx) {
         StockTransaction stockTransaction = new StockTransaction();
         stockTransaction.setStock(new Stock(1L));
-        stockTransaction.setUser(new User(1L));
+        stockTransaction.setUser(new UserAccount(1L));
         stockTransaction.setPrice(tx.fillPrice());
         stockTransaction.setQuantity(tx.orderedValue() / tx.fillPrice());
         stockTransaction.setTimeOfTransaction(tx.dateModified());

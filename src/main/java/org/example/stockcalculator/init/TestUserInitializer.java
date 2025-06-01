@@ -1,6 +1,6 @@
 package org.example.stockcalculator.init;
 
-import org.example.stockcalculator.entity.User;
+import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +16,11 @@ public class TestUserInitializer {
     @PostConstruct
     public void insertDefaultUser() {
         if (userRepository.count() == 0) {
-            User user = new User();
+            UserAccount user = new UserAccount();
+            user.setId(1L);
             user.setEmail("test@example.com");
-            user.setPassword("password");
-            user.setUsername("Test");
+            user.setGivenName("Test");
+            user.setFamilyName("TestSurname");
 
             userRepository.save(user);
         }

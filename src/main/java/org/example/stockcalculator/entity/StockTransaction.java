@@ -28,7 +28,7 @@ public class StockTransaction {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private User user;
+    private UserAccount user;
 
     @LastModifiedDate
     @Column(nullable = false)
