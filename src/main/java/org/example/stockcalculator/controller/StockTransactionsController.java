@@ -1,5 +1,7 @@
 package org.example.stockcalculator.controller;
 
+import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
+
 import java.util.List;
 
 import org.example.stockcalculator.dto.CreateTransactionRequest;
@@ -11,11 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,7 +33,8 @@ public class StockTransactionsController {
     }
 
     @GetMapping
-    public List<StockTransaction> getAllTransactions(@Valid @NotNull @RequestParam Long userId) {
+    public List<StockTransaction> getAllTransactions() {
+        Long userId = currentUserId();
 
         return stockTransactionRepository.findByUserIdOrderByTimeOfTransactionAsc(userId);
     }

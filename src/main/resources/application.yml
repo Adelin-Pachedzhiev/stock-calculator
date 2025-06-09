@@ -1,5 +1,10 @@
 spring:
   application.name: stock-calculator
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret-key: ${JWT_SECRET}
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,6 +20,13 @@ stock:
     client-id: ${PLAID_CLIENT_ID}
     secret: ${PLAID_SECRET}
     environment: sandbox
+auth:
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+    client-secret: ${GOOGLE_CLIENT_SECRET}
+  jwt:
+    secret: ${JWT_SECRET}
+
 
 
 

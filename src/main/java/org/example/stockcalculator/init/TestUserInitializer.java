@@ -1,7 +1,7 @@
 package org.example.stockcalculator.init;
 
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.repository.UserRepository;
+import org.example.stockcalculator.repository.UserAccountRepository;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TestUserInitializer {
 
-    private final UserRepository userRepository;
+    private final UserAccountRepository userRepository;
 
     @PostConstruct
     public void insertDefaultUser() {
