@@ -13,13 +13,14 @@ stock:
   prices-api:
     url: https://finnhub.io/api/v1
     api-key: ${FINNHUB_API_KEY}
+    enabled: false
   transactions-api:
     url: https://demo.trading212.com
     api-key: ${TRANSACTIONS_API_KEY}
   plaid-api:
     client-id: ${PLAID_CLIENT_ID}
     secret: ${PLAID_SECRET}
-    environment: sandbox
+    environment: production
 auth:
   google:
     client-id: ${GOOGLE_CLIENT_ID}

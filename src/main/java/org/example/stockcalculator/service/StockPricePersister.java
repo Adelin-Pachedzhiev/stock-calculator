@@ -11,6 +11,7 @@ import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.model.StockPriceResponse;
 import org.example.stockcalculator.repository.StockPriceRepository;
 import org.example.stockcalculator.repository.StockRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@ConditionalOnProperty(name = "stock.prices-api.enabled", havingValue = "true", matchIfMissing = true)
 public class StockPricePersister {
 
     private static final int API_REQUESTS_PER_MINUTE_LIMIT = 60;
@@ -30,6 +32,7 @@ public class StockPricePersister {
 
     @PostConstruct
     public void startPersistingStockPrices() {
+        log.info("Stock price persistence enabled. Starting to persist stock prices...");
         executorService.submit(this::persistStockPricesForever);
     }
 
