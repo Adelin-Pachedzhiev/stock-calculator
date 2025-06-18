@@ -6,10 +6,9 @@ import org.example.stockcalculator.entity.TransactionType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public record CreateTransactionRequest(
-        @NotNull(message = "User ID cannot be null")
-        Long userId,
 
         @NotNull(message = "Stock ID cannot be null")
         Long stockId,
@@ -22,6 +21,8 @@ public record CreateTransactionRequest(
         @Positive(message = "Price must be positive")
         Double price,
 
+        @PositiveOrZero
+        @NotNull
         Double fee,
 
         @NotNull
