@@ -20,7 +20,7 @@ stock:
   plaid-api:
     client-id: ${PLAID_CLIENT_ID}
     secret: ${PLAID_SECRET}
-    environment: production
+    environment: ${PLAID_ENVIRONMENT}
 auth:
   google:
     client-id: ${GOOGLE_CLIENT_ID}
