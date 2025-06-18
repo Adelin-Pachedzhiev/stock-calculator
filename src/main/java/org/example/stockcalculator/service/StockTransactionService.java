@@ -1,7 +1,10 @@
 package org.example.stockcalculator.service;
 
+import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
+
 import org.example.stockcalculator.dto.CreateTransactionRequest;
 import org.example.stockcalculator.entity.StockTransaction;
+import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.mapper.StockTransactionMapper;
 import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,8 @@ public class StockTransactionService {
 
     public void saveStockTransaction(CreateTransactionRequest stockTransaction) {
         StockTransaction stockTransactionEntity = stockTransactionMapper.toEntity(stockTransaction);
+        stockTransactionEntity.setUser(new UserAccount(currentUserId()));
         stockTransactionRepository.save(stockTransactionEntity);
     }
+
 }
