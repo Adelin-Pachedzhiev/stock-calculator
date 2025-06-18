@@ -1,4 +1,4 @@
-package org.example.stockcalculator.integration;
+package org.example.stockcalculator.integration.trading212;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class StockTransactionsClient {
+public class Trading212StockTransactionsClient {
 
     private static final String TRANSACTIONS_PATH = "/api/v0/equity/history/orders";
     private final RestTemplate restTemplate;

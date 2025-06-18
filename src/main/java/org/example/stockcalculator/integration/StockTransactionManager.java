@@ -8,6 +8,7 @@ import java.util.List;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
+import org.example.stockcalculator.integration.trading212.Trading212StockTransactionsClient;
 import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StockTransactionManager {
 
-    private final StockTransactionsClient stockTransactionsClient;
+    private final Trading212StockTransactionsClient stockTransactionsClient;
     private final StockTransactionRepository stockTransactionRepository;
 
     public void syncTransactionsToDb() {
@@ -28,7 +29,7 @@ public class StockTransactionManager {
         stockTransactionRepository.saveAll(stockTransactions);
     }
 
-    private static StockTransaction convertToStockTransactionEntity(StockTransactionsClient.Transaction tx) {
+    private static StockTransaction convertToStockTransactionEntity(Trading212StockTransactionsClient.Transaction tx) {
         StockTransaction stockTransaction = new StockTransaction();
         stockTransaction.setStock(new Stock(1L));
         stockTransaction.setUser(new UserAccount(1L));
