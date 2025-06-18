@@ -4,12 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.example.stockcalculator.entity.Stock;
-import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.model.StockPrice;
-import org.example.stockcalculator.repository.StockPriceRepository;
 import org.example.stockcalculator.repository.StockRepository;
 import org.example.stockcalculator.service.StockPriceService;
-import org.example.stockcalculator.service.StockProfitService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
