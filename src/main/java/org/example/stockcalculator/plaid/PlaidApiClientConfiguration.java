@@ -1,6 +1,6 @@
-package org.example.stockcalculator.integration.plaid;
+package org.example.stockcalculator.plaid;
 
-import static org.example.stockcalculator.integration.plaid.PlaidConfigurations.Environment.PRODUCTION;
+import static org.example.stockcalculator.plaid.PlaidProperties.Environment.PRODUCTION;
 
 import java.util.HashMap;
 
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.plaid.client.ApiClient;
+import com.plaid.client.request.PlaidApi;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlaidApiClientConfiguration {
 
-    private final PlaidConfigurations config;
+    private final PlaidProperties config;
 
     @Bean
     public ApiClient plaidApiClient() {
@@ -27,5 +28,10 @@ public class PlaidApiClientConfiguration {
         apiClient.setPlaidAdapter(config.environment().equals(PRODUCTION) ? ApiClient.Production : ApiClient.Sandbox);
 
         return apiClient;
+    }
+
+    @Bean
+    public PlaidApi plaidApi() {
+        return plaidApiClient().createService(PlaidApi.class);
     }
 }
