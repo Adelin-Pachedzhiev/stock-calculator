@@ -1,4 +1,4 @@
-package org.example.stockcalculator.plaid;
+package org.example.stockcalculator.integration.plaid;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;

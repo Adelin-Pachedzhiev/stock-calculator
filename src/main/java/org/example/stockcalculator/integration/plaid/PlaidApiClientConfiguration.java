@@ -1,6 +1,6 @@
-package org.example.stockcalculator.plaid;
+package org.example.stockcalculator.integration.plaid;
 
-import static org.example.stockcalculator.plaid.PlaidProperties.Environment.PRODUCTION;
+import static org.example.stockcalculator.integration.plaid.PlaidProperties.Environment.PRODUCTION;
 
 import java.util.HashMap;
 
