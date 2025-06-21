@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +33,10 @@ import retrofit2.Response;
 public class LinkController {
 
     private final PlaidApi plaidApi;
+    private final PlaidTokensService plaidTokensService;
 
     @PostMapping("/link-token")
-    public Map<String, String> createLinkToken()
+    public ResponseEntity<?> createLinkToken()
             throws IOException {
         Long userId = currentUserId();
 
@@ -50,20 +52,21 @@ public class LinkController {
 
         Response<LinkTokenCreateResponse> response = plaidApi.linkTokenCreate(request)
                 .execute();
-        log.info("Link token create response: {}", response);
+
         if (!response.isSuccessful()) {
             log.error("Failed to create link token: {}", response.errorBody().string());
-            throw new IOException("Failed to create link token");
+
+            return ResponseEntity.internalServerError().body("Failed to create link token");
         }
         String linkToken = response
                 .body()
                 .getLinkToken();
-        log.info("Created link token: {}", linkToken);
-        return Map.of("linkToken", linkToken);
+
+        return ResponseEntity.ok(Map.of("linkToken", linkToken));
     }
 
     @PostMapping("/exchange-public-token")
-    public Map<String, String> exchangePublicToken(@RequestBody Map<String, String> body)
+    public ResponseEntity<?> exchangePublicToken(@RequestBody Map<String, String> body)
             throws IOException {
         String publicToken = body.get("public_token");
 
@@ -78,10 +81,10 @@ public class LinkController {
 
         log.info("Exchange public token response: {}", response.body());
         String accessToken = response.body().getAccessToken();
-        log.info("Access token: {}", accessToken);
 
+        plaidTokensService.saveAccessToken(accessToken, currentUserId());
 
-        return Map.of("accessToken", accessToken);
+        return ResponseEntity.ok("Access token saved successfully");
     }
 
 }
