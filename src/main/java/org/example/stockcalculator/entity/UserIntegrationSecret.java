@@ -1,7 +1,14 @@
 package org.example.stockcalculator.entity;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +20,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class UserIntegrationSecret {
 
     @Id
@@ -29,4 +37,12 @@ public class UserIntegrationSecret {
 
     @Column(nullable = false)
     private String secret;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime lastChangedAt;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 }
