@@ -29,6 +29,9 @@ public record CreateTransactionRequest(
         TransactionType type,
 
         @NotNull
-        LocalDateTime timeOfTransaction
+        LocalDateTime timeOfTransaction,
+
+        @NotNull(message = "Currency cannot be null")
+        String currency
 ) {
 }

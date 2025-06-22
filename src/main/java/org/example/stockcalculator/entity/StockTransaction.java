@@ -45,6 +45,9 @@ public class StockTransaction {
     private Double price;
 
     @Column(nullable = false)
+    private String currency;
+
+    @Column(nullable = false)
     private Double quantity;
 
     private Double fee;
