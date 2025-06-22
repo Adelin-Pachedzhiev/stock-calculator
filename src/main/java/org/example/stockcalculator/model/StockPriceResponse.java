@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record StockPriceResponse(
         @JsonProperty("c") double currentPrice,
         @JsonProperty("d") double change,
-        @JsonProperty("dp") double percentChange,
+        @JsonProperty("dp") double changePercent,
         @JsonProperty("h") double highPrice,
         @JsonProperty("l") double lowPrice,
         @JsonProperty("o") double openPrice,

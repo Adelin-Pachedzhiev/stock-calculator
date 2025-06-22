@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
+import org.example.stockcalculator.mapper.StockPriceMapper;
 import org.example.stockcalculator.model.StockPriceResponse;
 import org.example.stockcalculator.repository.StockPriceRepository;
 import org.example.stockcalculator.repository.StockRepository;
@@ -29,6 +30,7 @@ public class StockPricePersister {
     private final StockPriceRepository stockPriceRepository;
     private final StockRepository stockRepository;
     private final ExecutorService executorService;
+    private final StockPriceMapper stockPriceMapper;
 
     @PostConstruct
     public void startPersistingStockPrices() {
@@ -68,11 +70,11 @@ public class StockPricePersister {
                 .ifPresent(stockPriceRepository::save);
     }
 
-    private StockPriceEntity createStockPriceEntity(Stock stock, StockPriceResponse price) {
-        StockPriceEntity stockPriceEntity = new StockPriceEntity();
-        stockPriceEntity.setStock(stock);
-        stockPriceEntity.setPrice(price.currentPrice());
-        stockPriceEntity.setTimestamp(LocalDateTime.now());
-        return stockPriceEntity;
+    private StockPriceEntity createStockPriceEntity(Stock stock, StockPriceResponse priceResponse) {
+        StockPriceEntity priceEntity = stockPriceMapper.toEntity(priceResponse);
+        priceEntity.setStock(stock);
+        priceEntity.setTimestamp(LocalDateTime.now());
+
+        return priceEntity;
     }
 }

@@ -21,6 +21,13 @@ public class StockPriceEntity {
     @JoinColumn(nullable = false)
     private Stock stock;
 
+    private Double change;
+    private Double changePercent;
+    private Double highPrice;
+    private Double lowPrice;
+    private Double openPrice;
+    private Double previousClosePrice;
+
     private LocalDateTime timestamp;
     private Double price;
 }
