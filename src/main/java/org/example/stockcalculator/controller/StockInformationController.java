@@ -27,7 +27,7 @@ public class StockInformationController {
         return stockPriceService.getCurrentPrice(stockSymbol);
     }
 
-    @GetMapping("/availableStocks")
+    @GetMapping
     public List<Stock> getAvailableStocks() {
         return stockRepository.findAll();
     }
