@@ -4,7 +4,7 @@ package org.example.stockcalculator.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record StockPriceResponse(
-        @JsonProperty("c") double currentPrice,
+        @JsonProperty("c") double price,
         @JsonProperty("d") double change,
         @JsonProperty("dp") double changePercent,
         @JsonProperty("h") double highPrice,
