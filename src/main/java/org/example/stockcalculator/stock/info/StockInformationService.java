@@ -1,6 +1,6 @@
-package org.example.stockcalculator.service;
+package org.example.stockcalculator.stock.info;
 
-import org.example.stockcalculator.dto.StockInformationResponse;
+import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.repository.StockPriceRepository;

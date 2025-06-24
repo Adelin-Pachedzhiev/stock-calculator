@@ -1,4 +1,4 @@
-package org.example.stockcalculator.service;
+package org.example.stockcalculator.auth.service;
 
 import java.util.Optional;
 

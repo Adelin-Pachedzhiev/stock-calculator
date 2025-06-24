@@ -1,4 +1,4 @@
-package org.example.stockcalculator.dto;
+package org.example.stockcalculator.stock.info.dto;
 
 public record StockInformationResponse(
         Long stockId,

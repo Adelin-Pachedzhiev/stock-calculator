@@ -1,4 +1,4 @@
-package org.example.stockcalculator.model;
+package org.example.stockcalculator.stock.profit;
 
 public record StockProfit(
         double profit,

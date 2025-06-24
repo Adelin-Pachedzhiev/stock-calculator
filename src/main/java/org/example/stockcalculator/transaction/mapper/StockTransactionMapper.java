@@ -1,8 +1,8 @@
-package org.example.stockcalculator.mapper;
+package org.example.stockcalculator.transaction.mapper;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
-import org.example.stockcalculator.dto.TransactionPayload;
+import org.example.stockcalculator.transaction.TransactionPayload;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

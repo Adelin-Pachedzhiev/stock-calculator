@@ -1,4 +1,4 @@
-package org.example.stockcalculator.model;
+package org.example.stockcalculator.portfolio.dto;
 
 public record PortfolioOverview(
     double totalProfit,

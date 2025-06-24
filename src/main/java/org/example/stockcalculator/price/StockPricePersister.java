@@ -1,4 +1,4 @@
-package org.example.stockcalculator.service;
+package org.example.stockcalculator.price;
 
 import static org.example.stockcalculator.util.SleepUtil.sleepSilentlyForSeconds;
 
@@ -8,8 +8,8 @@ import java.util.concurrent.ExecutorService;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
-import org.example.stockcalculator.mapper.StockPriceMapper;
-import org.example.stockcalculator.model.StockPriceResponse;
+import org.example.stockcalculator.price.mapper.StockPriceMapper;
+import org.example.stockcalculator.portfolio.dto.StockPriceResponse;
 import org.example.stockcalculator.repository.StockPriceRepository;
 import org.example.stockcalculator.repository.StockRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

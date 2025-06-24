@@ -1,14 +1,12 @@
-package org.example.stockcalculator.controller;
+package org.example.stockcalculator.transaction;
 
 import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
 
 import java.util.List;
 
-import org.example.stockcalculator.dto.TransactionPayload;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.integration.StockTransactionManager;
 import org.example.stockcalculator.repository.StockTransactionRepository;
-import org.example.stockcalculator.service.StockTransactionService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package org.example.stockcalculator.dto;
+package org.example.stockcalculator.transaction;
 
 import java.time.LocalDateTime;
 

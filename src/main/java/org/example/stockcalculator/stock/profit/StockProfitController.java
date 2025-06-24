@@ -1,11 +1,9 @@
-package org.example.stockcalculator.controller;
+package org.example.stockcalculator.stock.profit;
 
 import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
 
 import java.util.List;
 
-import org.example.stockcalculator.model.StockProfit;
-import org.example.stockcalculator.service.StockProfitService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

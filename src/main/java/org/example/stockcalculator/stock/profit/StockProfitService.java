@@ -1,4 +1,4 @@
-package org.example.stockcalculator.service;
+package org.example.stockcalculator.stock.profit;
 
 import static java.util.stream.Collectors.toMap;
 import static org.example.stockcalculator.util.ProfitUtils.averageProfits;
@@ -9,9 +9,9 @@ import java.util.Map;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.entity.StockTransaction;
-import org.example.stockcalculator.model.StockProfit;
 import org.example.stockcalculator.repository.StockPriceRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.transaction.UnsoldStockTransactionsService;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;

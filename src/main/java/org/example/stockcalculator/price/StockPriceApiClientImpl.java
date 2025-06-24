@@ -1,9 +1,9 @@
-package org.example.stockcalculator.service;
+package org.example.stockcalculator.price;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.stockcalculator.config.StockApiProperties;
-import org.example.stockcalculator.model.StockPriceResponse;
+import org.example.stockcalculator.portfolio.dto.StockPriceResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;

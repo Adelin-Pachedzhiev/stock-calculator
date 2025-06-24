@@ -2,7 +2,7 @@ package org.example.stockcalculator.util;
 
 import java.util.Collection;
 
-import org.example.stockcalculator.model.StockProfit;
+import org.example.stockcalculator.stock.profit.StockProfit;
 
 public class ProfitUtils {
 

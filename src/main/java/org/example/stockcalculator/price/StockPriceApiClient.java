@@ -1,8 +1,8 @@
-package org.example.stockcalculator.service;
+package org.example.stockcalculator.price;
 
 import java.util.Optional;
 
-import org.example.stockcalculator.model.StockPriceResponse;
+import org.example.stockcalculator.portfolio.dto.StockPriceResponse;
 
 public interface StockPriceApiClient {
 

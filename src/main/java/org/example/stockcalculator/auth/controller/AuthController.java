@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.example.stockcalculator.auth.service.GoogleTokenVerifierService;
 import org.example.stockcalculator.auth.service.JwtService;
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.service.UserAccountService;
+import org.example.stockcalculator.auth.service.UserAccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
