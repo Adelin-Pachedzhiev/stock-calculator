@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
-public record CreateTransactionRequest(
+public record TransactionPayload(
 
         @NotNull(message = "Stock ID cannot be null")
         Long stockId,
