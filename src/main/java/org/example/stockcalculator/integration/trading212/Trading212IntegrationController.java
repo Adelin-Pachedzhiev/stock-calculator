@@ -10,6 +10,7 @@ import org.example.stockcalculator.entity.UserIntegrationSecret;
 import org.example.stockcalculator.repository.IntegrationSecretRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class Trading212IntegrationController {
     private final IntegrationSecretRepository integrationSecretRepository;
 
     @PostMapping
-    public ResponseEntity<?> addIntegration(Map<String, String > requestBody) {
+    public ResponseEntity<?> addIntegration(@RequestBody Map<String, String> requestBody) {
         String secretTxt = requestBody.get("secret");
 
         UserIntegrationSecret integrationSecret = new UserIntegrationSecret();
