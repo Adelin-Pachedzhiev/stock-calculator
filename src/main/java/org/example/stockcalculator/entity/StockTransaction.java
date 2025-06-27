@@ -55,4 +55,8 @@ public class StockTransaction {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType type;
+
+    @ManyToOne
+    @JoinColumn
+    private UserIntegrationSecret integrationSecret;
 }
