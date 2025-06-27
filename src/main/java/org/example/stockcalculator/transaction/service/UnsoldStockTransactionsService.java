@@ -1,4 +1,4 @@
-package org.example.stockcalculator.transaction;
+package org.example.stockcalculator.transaction.service;
 
 import static org.example.stockcalculator.entity.TransactionType.BUY;
 import static org.example.stockcalculator.entity.TransactionType.SELL;
