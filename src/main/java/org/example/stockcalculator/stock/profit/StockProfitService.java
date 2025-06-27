@@ -11,7 +11,7 @@ import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.repository.StockPriceRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
-import org.example.stockcalculator.transaction.UnsoldStockTransactionsService;
+import org.example.stockcalculator.transaction.service.UnsoldStockTransactionsService;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,6 @@ public class StockProfitService {
     private final StockTransactionRepository stockTransactionRepository;
     private final StockPriceRepository stockPriceRepository;
     private final UnsoldStockTransactionsService unsoldStockTransactionsService;
-
-    record StockProfitPayload(String stock, StockProfit profit) {
-    }
-
 
     public Map<String, StockProfit> calculateProfitPerStock(Long userId) {
         List<Stock> stockSymbolsOfTransactions = stockTransactionRepository.findStockSymbolsOfTransactionsByUserId(userId);
