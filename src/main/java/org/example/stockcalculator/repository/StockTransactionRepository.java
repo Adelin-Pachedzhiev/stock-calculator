@@ -14,6 +14,7 @@ public interface StockTransactionRepository extends JpaRepository<StockTransacti
 
     List<StockTransaction> findByUserIdOrderByTimeOfTransactionAsc(Long user_id);
 
+
     @Query("SELECT DISTINCT t.stock FROM StockTransaction t WHERE t.user.id = :userId")
     List<Stock> findStockSymbolsOfTransactionsByUserId(@Param("userId") Long userId);
 
