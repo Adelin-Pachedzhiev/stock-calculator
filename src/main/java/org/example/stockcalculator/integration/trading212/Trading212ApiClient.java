@@ -33,7 +33,7 @@ public class Trading212ApiClient {
     private final StockTransactionApiProperties apiProperties;
 
     public List<Trading212Transaction> fetchTransactionsForIntegration(String secret) {
-        String currentPath = TRANSACTIONS_PATH;
+        String currentPath = TRANSACTIONS_PATH+ "?limit=50";
         List<Trading212Transaction> transactions = new ArrayList<>();
 
         do {
