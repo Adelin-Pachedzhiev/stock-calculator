@@ -1,6 +1,6 @@
 package org.example.stockcalculator.entity;
 
-public enum IntegrationPlatform {
+public enum Platform {
     TRADING212,
     PLAID
 }

@@ -7,16 +7,18 @@ import static org.example.stockcalculator.entity.TransactionType.SELL;
 import java.util.List;
 import java.util.Optional;
 
+import org.example.stockcalculator.entity.IntegrationSecret;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.entity.UserIntegrationSecret;
+import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.trading212.Trading212ApiClient;
 import org.example.stockcalculator.integration.trading212.dto.Trading212InstrumentMetadata;
 import org.example.stockcalculator.integration.trading212.dto.Trading212Transaction;
 import org.example.stockcalculator.integration.trading212.dto.Trading212UserInfo;
 import org.example.stockcalculator.integration.trading212.dto.TransactionTax;
 import org.example.stockcalculator.repository.IntegrationSecretRepository;
+import org.example.stockcalculator.repository.PlatformIntegrationRepository;
 import org.example.stockcalculator.repository.StockRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.stereotype.Component;
@@ -36,12 +38,8 @@ public class StockTransactionManager {
     private final StockRepository stockRepository;
 
     public void syncTransactionsToDbForIntegration(Long integrationId) {
-        Optional<UserIntegrationSecret> integrationOpt = integrationSecretRepository.findById(integrationId);
-        if (integrationOpt.isEmpty()) {
-            throw new IllegalArgumentException("Integration with ID " + integrationId + " not found.");
-        }
-        UserIntegrationSecret integration = integrationOpt.get();
-        String secret = integration.getSecret();
+        IntegrationSecret integrationSecret = integrationSecretRepository.findByIntegrationId(integrationId);
+        String secret = integrationSecret.getSecret();
 
         Trading212UserInfo userInfo = apiClient.getUserInfo(secret);
         String mainCurrencyForAccount = userInfo.currencyCode();
@@ -52,6 +50,7 @@ public class StockTransactionManager {
         List<StockTransaction> stockTransactions = apiClient.fetchTransactionsForIntegration(secret)
                 .stream()
                 .flatMap(tx -> convertToStockTransactionEntity(tx, instrumentMetadata, stocks, mainCurrencyForAccount).stream())
+                .peek(tx -> tx.setPlatformIntegration(new PlatformIntegration(integrationId)))
                 .toList();
 
         log.info("Saving {} stock transactions for integration ID {}", stockTransactions.size(), integrationId);

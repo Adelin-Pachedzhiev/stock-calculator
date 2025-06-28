@@ -58,5 +58,5 @@ public class StockTransaction {
 
     @ManyToOne
     @JoinColumn
-    private UserIntegrationSecret integrationSecret;
+    private PlatformIntegration platformIntegration;
 }

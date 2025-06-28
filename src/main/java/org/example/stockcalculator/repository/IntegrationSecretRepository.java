@@ -1,14 +1,11 @@
 package org.example.stockcalculator.repository;
 
-import java.util.List;
-
-import org.example.stockcalculator.entity.IntegrationPlatform;
-import org.example.stockcalculator.entity.UserIntegrationSecret;
+import org.example.stockcalculator.entity.IntegrationSecret;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IntegrationSecretRepository extends JpaRepository<UserIntegrationSecret, Long> {
+public interface IntegrationSecretRepository extends JpaRepository<IntegrationSecret, Long> {
 
-    UserIntegrationSecret findByUserAccountIdAndPlatform(Long userId, IntegrationPlatform platform);
+    IntegrationSecret findByIntegrationId(Long integrationId);
 
-    List<UserIntegrationSecret> findByUserAccountId(Long userAccountId); //todo use view to not include actual secret in the query result
+
 }

@@ -1,10 +1,11 @@
 package org.example.stockcalculator.integration.plaid;
 
-import static org.example.stockcalculator.entity.IntegrationPlatform.PLAID;
+import static org.example.stockcalculator.entity.Platform.PLAID;
 
+import org.example.stockcalculator.entity.IntegrationSecret;
+import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.entity.UserIntegrationSecret;
-import org.example.stockcalculator.repository.IntegrationSecretRepository;
+import org.example.stockcalculator.repository.PlatformIntegrationRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -13,19 +14,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlaidTokensService {
 
-    private final IntegrationSecretRepository repository;
+    private final PlatformIntegrationRepository repository;
 
     public void saveAccessToken(String accessToken, Long userId) {
-        UserIntegrationSecret secret = new UserIntegrationSecret();
-        secret.setUserAccount(new UserAccount(userId));
-        secret.setPlatform(PLAID);
-        secret.setSecret(accessToken); //todo encrypt secret
+        PlatformIntegration platformIntegration = new PlatformIntegration();
+        platformIntegration.setUserAccount(new UserAccount(userId));
+        platformIntegration.setPlatform(PLAID);
+        platformIntegration.setSecret(new IntegrationSecret(accessToken, platformIntegration)); //todo encrypt platformIntegration
 
-        repository.save(secret);
+        repository.save(platformIntegration);
     }
 
     public String findAccessToken(Long userId) {
-        return repository.findByUserAccountIdAndPlatform(userId, PLAID).getSecret(); //todo decrypt secret
+        return repository.findByUserAccountIdAndPlatform(userId, PLAID).getSecret().getSecret(); //todo decrypt secret
     }
 
 }

@@ -1,10 +1,14 @@
 package org.example.stockcalculator.entity;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +20,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class UserIntegrationSecret {
+@NoArgsConstructor
+public class PlatformIntegration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +40,12 @@ public class UserIntegrationSecret {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private IntegrationPlatform platform;
+    private Platform platform;
 
-    @Column(nullable = false)
-    private String secret;
+    @OneToOne(cascade = ALL, optional = false)
+    @JoinColumn(nullable = false)
+    @JsonBackReference
+    private IntegrationSecret secret;
 
     @LastModifiedDate
     @Column(nullable = false)
@@ -45,4 +54,8 @@ public class UserIntegrationSecret {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    public PlatformIntegration(Long id) {
+        this.id = id;
+    }
 }
