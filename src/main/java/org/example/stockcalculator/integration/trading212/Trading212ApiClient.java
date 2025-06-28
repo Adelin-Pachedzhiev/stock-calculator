@@ -3,6 +3,7 @@ package org.example.stockcalculator.integration.trading212;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,19 +33,36 @@ public class Trading212ApiClient {
     private final RestTemplate restTemplate;
     private final StockTransactionApiProperties apiProperties;
 
-    public List<Trading212Transaction> fetchTransactionsForIntegration(String secret) {
-        String currentPath = TRANSACTIONS_PATH+ "?limit=50";
+    public List<Trading212Transaction> fetchTransactionsForIntegration(String secret, LocalDateTime toDate) {
+        String currentPath = TRANSACTIONS_PATH + "?limit=50";
         List<Trading212Transaction> transactions = new ArrayList<>();
 
+        boolean hasReachedToDate;
         do {
             Trading212TransactionsResponse exchange = getTransactionsFromPath(currentPath, secret);
             log.info("Fetched {} transactions from Trading212.", exchange);
+            hasReachedToDate = filterOldTransactionsAndCheckIfReachedToDate(toDate, exchange);
             currentPath = exchange.nextPagePath();
             transactions.addAll(exchange.items());
         }
-        while (currentPath != null);
+        while (currentPath != null && !hasReachedToDate);
 
         return transactions;
+    }
+
+    private  boolean filterOldTransactionsAndCheckIfReachedToDate(LocalDateTime toDate, Trading212TransactionsResponse transactions) {
+        if (toDate == null) {
+            return false;
+        }
+
+        List<Trading212Transaction> filteredByToDateTransactions = transactions.items().stream()
+                .filter(tx -> tx.dateModified().isAfter(toDate))
+                .toList();
+        if (transactions.items().size() != filteredByToDateTransactions.size()) {
+            transactions.items().retainAll(filteredByToDateTransactions);
+            return true;
+        }
+        return false;
     }
 
     public List<Trading212InstrumentMetadata> fetchInstrumentsMetadataForIntegration(String secret) {
@@ -52,7 +70,9 @@ public class Trading212ApiClient {
 
         String url = apiProperties.url() + INSTRUMENTS_METADATA_PATH;
 
-        return restTemplate.exchange(url, GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Trading212InstrumentMetadata>>() {})
+        return restTemplate.exchange(url, GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Trading212InstrumentMetadata>>() {
+
+                })
                 .getBody();
     }
 

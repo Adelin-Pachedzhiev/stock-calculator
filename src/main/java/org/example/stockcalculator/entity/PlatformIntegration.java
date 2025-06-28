@@ -55,6 +55,10 @@ public class PlatformIntegration {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime lastSyncAt;
+
+    private LocalDateTime latestSyncedTransactionDate;
+
     public PlatformIntegration(Long id) {
         this.id = id;
     }

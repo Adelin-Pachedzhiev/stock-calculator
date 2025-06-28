@@ -4,20 +4,20 @@ import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
 import static org.example.stockcalculator.entity.TransactionType.BUY;
 import static org.example.stockcalculator.entity.TransactionType.SELL;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.example.stockcalculator.entity.IntegrationSecret;
+import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.trading212.Trading212ApiClient;
 import org.example.stockcalculator.integration.trading212.dto.Trading212InstrumentMetadata;
 import org.example.stockcalculator.integration.trading212.dto.Trading212Transaction;
 import org.example.stockcalculator.integration.trading212.dto.Trading212UserInfo;
 import org.example.stockcalculator.integration.trading212.dto.TransactionTax;
-import org.example.stockcalculator.repository.IntegrationSecretRepository;
 import org.example.stockcalculator.repository.PlatformIntegrationRepository;
 import org.example.stockcalculator.repository.StockRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
@@ -34,11 +34,12 @@ public class StockTransactionManager {
     public static final double EUR_USD_RATE = 1.17;
     private final Trading212ApiClient apiClient;
     private final StockTransactionRepository stockTransactionRepository;
-    private final IntegrationSecretRepository integrationSecretRepository;
+    private final PlatformIntegrationRepository platformIntegrationRepository;
     private final StockRepository stockRepository;
 
     public void syncTransactionsToDbForIntegration(Long integrationId) {
-        IntegrationSecret integrationSecret = integrationSecretRepository.findByIntegrationId(integrationId);
+        PlatformIntegration platformIntegration = platformIntegrationRepository.findById(integrationId).orElseThrow();
+        IntegrationSecret integrationSecret = platformIntegration.getSecret();
         String secret = integrationSecret.getSecret();
 
         Trading212UserInfo userInfo = apiClient.getUserInfo(secret);
@@ -47,14 +48,29 @@ public class StockTransactionManager {
         List<Trading212InstrumentMetadata> instrumentMetadata = apiClient.fetchInstrumentsMetadataForIntegration(secret);
         List<Stock> stocks = stockRepository.findAll();
 
-        List<StockTransaction> stockTransactions = apiClient.fetchTransactionsForIntegration(secret)
+        List<Trading212Transaction> trading212Transactions = apiClient.fetchTransactionsForIntegration(secret,
+                platformIntegration.getLatestSyncedTransactionDate());
+
+        List<StockTransaction> stockTransactions = trading212Transactions
                 .stream()
                 .flatMap(tx -> convertToStockTransactionEntity(tx, instrumentMetadata, stocks, mainCurrencyForAccount).stream())
                 .peek(tx -> tx.setPlatformIntegration(new PlatformIntegration(integrationId)))
                 .toList();
 
+        updatePlatformIntegration(trading212Transactions, platformIntegration);
+
         log.info("Saving {} stock transactions for integration ID {}", stockTransactions.size(), integrationId);
         stockTransactionRepository.saveAll(stockTransactions);
+    }
+
+    private void updatePlatformIntegration(List<Trading212Transaction> trading212Transactions, PlatformIntegration platformIntegration) {
+        if (!trading212Transactions.isEmpty()) {
+            LocalDateTime localDateTimeOfLatestTransaction = trading212Transactions.getFirst().dateModified();
+            platformIntegration.setLatestSyncedTransactionDate(localDateTimeOfLatestTransaction);
+        }
+
+        platformIntegration.setLastSyncAt(LocalDateTime.now());
+        platformIntegrationRepository.save(platformIntegration);
     }
 
     private Optional<StockTransaction> convertToStockTransactionEntity(Trading212Transaction tx,
@@ -94,7 +110,7 @@ public class StockTransactionManager {
             if (!stockMetadata.currencyCode().equals(mainCurrencyForAccount)) {
                 orderedValue *= EUR_USD_RATE;
             }
-            stockTransaction.setQuantity(orderedValue  / tx.fillPrice());
+            stockTransaction.setQuantity(orderedValue / tx.fillPrice());
             stockTransaction.setType(tx.orderedValue() > 0 ? BUY : SELL);
         }
         else {
@@ -107,7 +123,7 @@ public class StockTransactionManager {
     private double calculateFee(Trading212Transaction tx, String mainCurrencyForAccount) {
         double taxAmount = -tx.taxes().stream().mapToDouble(TransactionTax::quantity).sum();
         if (mainCurrencyForAccount.equals("EUR")) {
-            taxAmount*= EUR_USD_RATE;
+            taxAmount *= EUR_USD_RATE;
         }
         return taxAmount;
     }
