@@ -18,4 +18,6 @@ public interface StockTransactionRepository extends JpaRepository<StockTransacti
     @Query("SELECT DISTINCT t.stock FROM StockTransaction t WHERE t.user.id = :userId")
     List<Stock> findStockSymbolsOfTransactionsByUserId(@Param("userId") Long userId);
 
+
+    void deleteByPlatformIntegrationId(Long platformIntegrationId);
 }

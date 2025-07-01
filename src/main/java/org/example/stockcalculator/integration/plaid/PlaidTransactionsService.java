@@ -44,7 +44,7 @@ public class PlaidTransactionsService {
     }
 
 
-    @PostConstruct
+//    @PostConstruct
     public void institutionsGet() throws IOException {
         InstitutionsGetByIdRequestOptions options = new InstitutionsGetByIdRequestOptions()
                 .includeOptionalMetadata(true);
