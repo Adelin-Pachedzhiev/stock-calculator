@@ -7,7 +7,10 @@ import java.util.List;
 import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.dto.PlatformIntegrationResponse;
 import org.example.stockcalculator.repository.PlatformIntegrationRepository;
+import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +24,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class IntegrationController {
 
-    private final PlatformIntegrationRepository integrationSecretRepository;
+    private final PlatformIntegrationRepository integrationRepository;
     private final StockTransactionManager stockTransactionManager;
+    private final StockTransactionRepository stockTransactionRepository;
 
     @GetMapping
     public ResponseEntity<?> getIntegrations() {
         Long userId = currentUserId();
-        List<PlatformIntegration> integrationSecrets = integrationSecretRepository.findByUserAccountId(userId);
+        List<PlatformIntegration> integrationSecrets = integrationRepository.findByUserAccountId(userId);
         List<PlatformIntegrationResponse> responseList = integrationSecrets.stream()
                 .map(secret ->
                         new PlatformIntegrationResponse(secret.getId(), secret.getPlatform(), secret.getLastChangedAt()))
@@ -42,6 +46,15 @@ public class IntegrationController {
 
         return ResponseEntity.ok(integrationId);
 
+    }
+
+    @DeleteMapping("/{integrationId}")
+    @Transactional
+    public ResponseEntity<?> deleteIntegration(@PathVariable Long integrationId) {
+        stockTransactionRepository.deleteByPlatformIntegrationId(integrationId);
+        integrationRepository.deleteById(integrationId);
+
+        return ResponseEntity.ok(integrationId);
     }
 
 
