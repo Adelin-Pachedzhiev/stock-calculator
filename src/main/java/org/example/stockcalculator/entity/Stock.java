@@ -19,6 +19,7 @@ public class Stock {
 
     private String symbol;
     private String name;
+    @Column(length = 1000)
     private String description;
 
     public Stock(Long id){
