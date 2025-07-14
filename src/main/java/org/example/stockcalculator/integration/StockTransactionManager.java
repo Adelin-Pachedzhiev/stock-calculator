@@ -1,26 +1,11 @@
 package org.example.stockcalculator.integration;
 
-import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
-import static org.example.stockcalculator.entity.TransactionType.BUY;
-import static org.example.stockcalculator.entity.TransactionType.SELL;
+import static org.example.stockcalculator.integration.InstitutionNameConstants.TRADING212;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import org.example.stockcalculator.entity.IntegrationSecret;
 import org.example.stockcalculator.entity.PlatformIntegration;
-import org.example.stockcalculator.entity.Stock;
-import org.example.stockcalculator.entity.StockTransaction;
-import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.integration.trading212.Trading212ApiClient;
-import org.example.stockcalculator.integration.trading212.dto.Trading212InstrumentMetadata;
-import org.example.stockcalculator.integration.trading212.dto.Trading212Transaction;
-import org.example.stockcalculator.integration.trading212.dto.Trading212UserInfo;
-import org.example.stockcalculator.integration.trading212.dto.TransactionTax;
-import org.example.stockcalculator.repository.PlatformIntegrationRepository;
-import org.example.stockcalculator.repository.StockRepository;
-import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.integration.plaid.PlaidTransactionsSyncService;
+import org.example.stockcalculator.integration.trading212.Trading212TransactionsSyncService;
+import org.example.stockcalculator.repository.PlatformIntegrationJpaRepository;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -31,100 +16,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class StockTransactionManager {
 
-    public static final double EUR_USD_RATE = 1.17;
-    private final Trading212ApiClient apiClient;
-    private final StockTransactionRepository stockTransactionRepository;
-    private final PlatformIntegrationRepository platformIntegrationRepository;
-    private final StockRepository stockRepository;
+    private final PlatformIntegrationJpaRepository platformIntegrationRepository;
+    private final PlaidTransactionsSyncService plaidTransactionsSyncService;
+    private final Trading212TransactionsSyncService trading212TransactionsSyncService;
 
     public void syncTransactionsToDbForIntegration(Long integrationId) {
         PlatformIntegration platformIntegration = platformIntegrationRepository.findById(integrationId).orElseThrow();
-        IntegrationSecret integrationSecret = platformIntegration.getSecret();
-        String secret = integrationSecret.getSecret();
-
-        Trading212UserInfo userInfo = apiClient.getUserInfo(secret);
-        String mainCurrencyForAccount = userInfo.currencyCode();
-
-        List<Trading212InstrumentMetadata> instrumentMetadata = apiClient.fetchInstrumentsMetadataForIntegration(secret);
-        List<Stock> stocks = stockRepository.findAll();
-
-        List<Trading212Transaction> trading212Transactions = apiClient.fetchTransactionsForIntegration(secret,
-                platformIntegration.getLatestSyncedTransactionDate());
-
-        List<StockTransaction> stockTransactions = trading212Transactions
-                .stream()
-                .flatMap(tx -> convertToStockTransactionEntity(tx, instrumentMetadata, stocks, mainCurrencyForAccount).stream())
-                .peek(tx -> tx.setPlatformIntegration(new PlatformIntegration(integrationId)))
-                .toList();
-
-        updatePlatformIntegration(trading212Transactions, platformIntegration);
-
-        log.info("Saving {} stock transactions for integration ID {}", stockTransactions.size(), integrationId);
-        stockTransactionRepository.saveAll(stockTransactions);
-    }
-
-    private void updatePlatformIntegration(List<Trading212Transaction> trading212Transactions, PlatformIntegration platformIntegration) {
-        if (!trading212Transactions.isEmpty()) {
-            LocalDateTime localDateTimeOfLatestTransaction = trading212Transactions.getFirst().dateModified();
-            platformIntegration.setLatestSyncedTransactionDate(localDateTimeOfLatestTransaction);
-        }
-
-        platformIntegration.setLastSyncAt(LocalDateTime.now());
-        platformIntegrationRepository.save(platformIntegration);
-    }
-
-    private Optional<StockTransaction> convertToStockTransactionEntity(Trading212Transaction tx,
-            List<Trading212InstrumentMetadata> instrumentMetadata,
-            List<Stock> stocks,
-            String mainCurrencyForAccount) {
-
-        Trading212InstrumentMetadata stockMetadata = instrumentMetadata.stream()
-                .filter(m -> m.ticker().equals(tx.ticker()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Ticker " + tx.ticker() + " not found in metadata."));
-
-        Optional<Stock> stock = stocks.stream()
-                .filter(s -> s.getSymbol().equals(stockMetadata.shortName()))
-                .findFirst();
-        if (stock.isEmpty()) {
-            return Optional.empty();
-        }
-
-        StockTransaction stockTransaction = new StockTransaction();
-        stockTransaction.setStock(stock.get());
-        stockTransaction.setUser(new UserAccount(currentUserId()));
-        stockTransaction.setPrice(tx.fillPrice());
-        stockTransaction.setFee(calculateFee(tx, mainCurrencyForAccount));
-        stockTransaction.setTimeOfTransaction(tx.dateModified());
-        stockTransaction.setCurrency(stockMetadata.currencyCode());
-
-        computeQuantityAndType(tx, mainCurrencyForAccount, stockMetadata, stockTransaction);
-
-        return Optional.of(stockTransaction);
-    }
-
-    private static void computeQuantityAndType(Trading212Transaction tx, String mainCurrencyForAccount, Trading212InstrumentMetadata stockMetadata,
-            StockTransaction stockTransaction) {
-        if (tx.orderedQuantity() == null) {
-            double orderedValue = tx.orderedValue();
-            if (!stockMetadata.currencyCode().equals(mainCurrencyForAccount)) {
-                orderedValue *= EUR_USD_RATE;
-            }
-            stockTransaction.setQuantity(orderedValue / tx.fillPrice());
-            stockTransaction.setType(tx.orderedValue() > 0 ? BUY : SELL);
+        if (platformIntegration.getPlatform().equals(TRADING212)) {
+            trading212TransactionsSyncService.syncTransactions(platformIntegration);
         }
         else {
-            stockTransaction.setQuantity(tx.orderedQuantity());
-            stockTransaction.setType(tx.orderedQuantity() > 0 ? BUY : SELL);
-            throw new UnsupportedOperationException("Ordered quantity is not supported yet.");
+            plaidTransactionsSyncService.syncTransactions(platformIntegration);
         }
-    }
-
-    private double calculateFee(Trading212Transaction tx, String mainCurrencyForAccount) {
-        double taxAmount = -tx.taxes().stream().mapToDouble(TransactionTax::quantity).sum();
-        if (mainCurrencyForAccount.equals("EUR")) {
-            taxAmount *= EUR_USD_RATE;
-        }
-        return taxAmount;
     }
 }

@@ -8,12 +8,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.example.stockcalculator.integration.repository.PlatformIntegrationRepository;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.plaid.client.model.ItemGetRequest;
+import com.plaid.client.model.ItemGetResponse;
 import com.plaid.client.model.ItemPublicTokenExchangeRequest;
 import com.plaid.client.model.ItemPublicTokenExchangeResponse;
 import com.plaid.client.model.LinkTokenCreateRequest;
@@ -33,7 +37,7 @@ import retrofit2.Response;
 public class LinkController {
 
     private final PlaidApi plaidApi;
-    private final PlaidTokensService plaidTokensService;
+    private final PlatformIntegrationRepository platformIntegrationRepository;
 
     @PostMapping("/link-token")
     public ResponseEntity<?> createLinkToken()
@@ -70,6 +74,17 @@ public class LinkController {
             throws IOException {
         String publicToken = body.get("public_token");
 
+        String accessToken = exchangePublicForAccessToken(publicToken);
+
+        String institutionName = fetchInstitutionName(accessToken);
+
+        platformIntegrationRepository.saveIntegrationAndSecret(accessToken, currentUserId(), institutionName);
+
+        return ResponseEntity.ok("Access token saved successfully");
+    }
+
+    private String exchangePublicForAccessToken(String publicToken)
+            throws IOException {
         log.info("Exchanging public token: {}", publicToken);
         ItemPublicTokenExchangeRequest itemPublicTokenExchangeRequest = new
                 ItemPublicTokenExchangeRequest()
@@ -80,11 +95,16 @@ public class LinkController {
                 .execute();
 
         log.info("Exchange public token response: {}", response.body());
-        String accessToken = response.body().getAccessToken();
+        return response.body().getAccessToken();
+    }
 
-        plaidTokensService.saveAccessToken(accessToken, currentUserId());
-
-        return ResponseEntity.ok("Access token saved successfully");
+    @Nullable
+    private String fetchInstitutionName(String accessToken)
+            throws IOException {
+        ItemGetRequest itemGetRequest = new ItemGetRequest();
+        itemGetRequest.accessToken(accessToken);
+        Response<ItemGetResponse> item = plaidApi.itemGet(itemGetRequest).execute();
+        return item.body().getItem().getInstitutionName();
     }
 
 }

@@ -38,9 +38,8 @@ public class PlatformIntegration {
     @JoinColumn(nullable = false)
     private UserAccount userAccount;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Platform platform;
+    private String platform;
 
     @OneToOne(cascade = ALL, optional = false)
     @JoinColumn(nullable = false)

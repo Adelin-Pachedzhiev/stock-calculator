@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.dto.PlatformIntegrationResponse;
-import org.example.stockcalculator.repository.PlatformIntegrationRepository;
+import org.example.stockcalculator.repository.PlatformIntegrationJpaRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class IntegrationController {
 
-    private final PlatformIntegrationRepository integrationRepository;
+    private final PlatformIntegrationJpaRepository integrationRepository;
     private final StockTransactionManager stockTransactionManager;
     private final StockTransactionRepository stockTransactionRepository;
 
@@ -45,7 +45,6 @@ public class IntegrationController {
         stockTransactionManager.syncTransactionsToDbForIntegration(integrationId);
 
         return ResponseEntity.ok(integrationId);
-
     }
 
     @DeleteMapping("/{integrationId}")
@@ -56,8 +55,4 @@ public class IntegrationController {
 
         return ResponseEntity.ok(integrationId);
     }
-
-
-
-
 }
