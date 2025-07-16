@@ -1,26 +1,29 @@
-package org.example.stockcalculator.watchlist;
-
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.example.stockcalculator.account.utils.AuthUtils;
-import org.example.stockcalculator.repository.WatchlistItemRepository;
-import org.example.stockcalculator.stock.info.StockInformationService;
-import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.http.ResponseEntity;
+package org.example.stockcalculator.watchlist.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.example.stockcalculator.account.utils.AuthUtils;
+import org.example.stockcalculator.stock.info.StockInformationService;
+import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
+import org.example.stockcalculator.watchlist.repository.WatchlistItemRepository;
+import org.example.stockcalculator.watchlist.service.WatchlistService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/watchlist")
 @RequiredArgsConstructor
 public class WatchlistController {
+
     private final WatchlistItemRepository watchlistItemRepository;
     private final StockInformationService stockInformationService;
     private final WatchlistService watchlistService;
