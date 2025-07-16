@@ -1,9 +1,8 @@
-package org.example.stockcalculator.integration.plaid;
+package org.example.stockcalculator.integration.repository;
 
 import org.example.stockcalculator.entity.IntegrationSecret;
 import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.integration.repository.PlatformIntegrationRepository;
 import org.example.stockcalculator.repository.PlatformIntegrationJpaRepository;
 import org.springframework.stereotype.Repository;
 
