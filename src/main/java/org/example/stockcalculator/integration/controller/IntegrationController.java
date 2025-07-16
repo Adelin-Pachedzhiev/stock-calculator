@@ -1,10 +1,11 @@
-package org.example.stockcalculator.integration;
+package org.example.stockcalculator.integration.controller;
 
 import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 
 import java.util.List;
 
 import org.example.stockcalculator.entity.PlatformIntegration;
+import org.example.stockcalculator.integration.StockTransactionManager;
 import org.example.stockcalculator.integration.dto.PlatformIntegrationResponse;
 import org.example.stockcalculator.integration.repository.PlatformIntegrationJpaRepository;
 import org.example.stockcalculator.transaction.repository.StockTransactionRepository;

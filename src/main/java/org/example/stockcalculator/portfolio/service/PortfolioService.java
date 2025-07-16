@@ -1,4 +1,4 @@
-package org.example.stockcalculator.portfolio;
+package org.example.stockcalculator.portfolio.service;
 
 import org.example.stockcalculator.portfolio.dto.PortfolioOverview;
 import org.example.stockcalculator.stock.profit.StockProfit;

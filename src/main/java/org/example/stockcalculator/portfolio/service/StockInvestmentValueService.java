@@ -1,4 +1,4 @@
-package org.example.stockcalculator.portfolio;
+package org.example.stockcalculator.portfolio.service;
 
 import static java.util.stream.Collectors.toMap;
 

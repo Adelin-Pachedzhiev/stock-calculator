@@ -1,5 +1,6 @@
-package org.example.stockcalculator.portfolio;
+package org.example.stockcalculator.portfolio.controller;
 
+import org.example.stockcalculator.portfolio.service.PortfolioService;
 import org.example.stockcalculator.portfolio.dto.PortfolioOverview;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package org.example.stockcalculator.price;
+package org.example.stockcalculator.price.client;
 
 import java.util.Optional;
 

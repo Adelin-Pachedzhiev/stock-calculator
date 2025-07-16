@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
+import org.example.stockcalculator.price.client.StockPriceApiClient;
 import org.example.stockcalculator.price.mapper.StockPriceMapper;
 import org.example.stockcalculator.portfolio.dto.StockPriceResponse;
 import org.example.stockcalculator.price.repository.StockPriceRepository;
