@@ -1,4 +1,4 @@
-package org.example.stockcalculator.repository;
+package org.example.stockcalculator.stock.repository;
 
 import java.util.Optional;
 import java.util.Set;

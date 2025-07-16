@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.example.stockcalculator.entity.Stock;
-import org.example.stockcalculator.repository.StockRepository;
+import org.example.stockcalculator.stock.repository.StockRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

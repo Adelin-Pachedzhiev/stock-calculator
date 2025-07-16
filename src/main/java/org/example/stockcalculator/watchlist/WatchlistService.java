@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.entity.WatchlistItem;
-import org.example.stockcalculator.repository.StockRepository;
+import org.example.stockcalculator.stock.repository.StockRepository;
 import org.example.stockcalculator.repository.UserAccountRepository;
 import org.example.stockcalculator.repository.WatchlistItemRepository;
 import org.springframework.stereotype.Service;

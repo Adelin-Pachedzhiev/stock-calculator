@@ -4,14 +4,12 @@ import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.repository.StockRepository;
+import org.example.stockcalculator.stock.repository.StockRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
-import org.example.stockcalculator.repository.UserAccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

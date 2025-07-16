@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.example.stockcalculator.entity.Stock;
-import org.example.stockcalculator.repository.StockRepository;
+import org.example.stockcalculator.stock.repository.StockRepository;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;

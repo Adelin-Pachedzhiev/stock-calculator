@@ -11,7 +11,7 @@ import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.price.mapper.StockPriceMapper;
 import org.example.stockcalculator.portfolio.dto.StockPriceResponse;
 import org.example.stockcalculator.price.repository.StockPriceRepository;
-import org.example.stockcalculator.repository.StockRepository;
+import org.example.stockcalculator.stock.repository.StockRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 

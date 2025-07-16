@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.price.dto.StockPrice;
-import org.example.stockcalculator.repository.StockRepository;
+import org.example.stockcalculator.stock.repository.StockRepository;
 import org.example.stockcalculator.price.StockPriceService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
