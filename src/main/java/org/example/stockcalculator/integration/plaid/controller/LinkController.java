@@ -1,23 +1,17 @@
-package org.example.stockcalculator.integration.plaid;
+package org.example.stockcalculator.integration.plaid.controller;
 
 import java.io.IOException;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
+import org.example.stockcalculator.integration.plaid.service.PlaidLinkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.plaid.client.model.ItemGetRequest;
-import com.plaid.client.model.ItemGetResponse;
-import com.plaid.client.model.ItemPublicTokenExchangeRequest;
-import com.plaid.client.model.ItemPublicTokenExchangeResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import retrofit2.Response;
 
 @Slf4j
 @RestController

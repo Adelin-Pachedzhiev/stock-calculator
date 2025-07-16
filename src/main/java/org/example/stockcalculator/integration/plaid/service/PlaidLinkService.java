@@ -1,4 +1,4 @@
-package org.example.stockcalculator.integration.plaid;
+package org.example.stockcalculator.integration.plaid.service;
 
 import static com.plaid.client.model.CountryCode.CA;
 import static com.plaid.client.model.CountryCode.US;

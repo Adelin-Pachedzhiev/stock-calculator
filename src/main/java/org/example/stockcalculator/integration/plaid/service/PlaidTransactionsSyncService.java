@@ -1,4 +1,4 @@
-package org.example.stockcalculator.integration.plaid;
+package org.example.stockcalculator.integration.plaid.service;
 
 import static org.example.stockcalculator.entity.Platform.PLAID;
 

@@ -3,7 +3,7 @@ package org.example.stockcalculator.integration;
 import static org.example.stockcalculator.integration.InstitutionNameConstants.TRADING212;
 
 import org.example.stockcalculator.entity.PlatformIntegration;
-import org.example.stockcalculator.integration.plaid.PlaidTransactionsSyncService;
+import org.example.stockcalculator.integration.plaid.service.PlaidTransactionsSyncService;
 import org.example.stockcalculator.integration.trading212.Trading212TransactionsSyncService;
 import org.example.stockcalculator.integration.repository.PlatformIntegrationJpaRepository;
 import org.springframework.stereotype.Component;
