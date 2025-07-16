@@ -50,6 +50,7 @@ public class PlaidLinkService {
         Response<LinkTokenCreateResponse> response = plaidApi.linkTokenCreate(request)
                 .execute();
         throwOnFailedRequest(response);
+        log.info("Link token created: {}", response.body());
 
         return response.body().getLinkToken();
     }
@@ -73,17 +74,9 @@ public class PlaidLinkService {
 
         var response = plaidApi.itemPublicTokenExchange(itemPublicTokenExchangeRequest).execute();
         throwOnFailedRequest(response);
-
         log.info("Exchange public token response: {}", response.body());
-        return response.body().getAccessToken();
-    }
 
-    private void throwOnFailedRequest(Response<?> response)
-            throws IOException {
-        if (!response.isSuccessful()) {
-            log.error("Request failed: {}", response.errorBody());
-            throw new RuntimeException(response.errorBody().string());
-        }
+        return response.body().getAccessToken();
     }
 
     @Nullable
@@ -93,7 +86,16 @@ public class PlaidLinkService {
         itemGetRequest.accessToken(accessToken);
         Response<ItemGetResponse> response = plaidApi.itemGet(itemGetRequest).execute();
         throwOnFailedRequest(response);
+        log.info("Institution retrieved: {}", response.body().getItem());
 
         return response.body().getItem().getInstitutionName();
+    }
+
+    private void throwOnFailedRequest(Response<?> response)
+            throws IOException {
+        if (!response.isSuccessful()) {
+            log.error("Request failed: {}", response.errorBody());
+            throw new RuntimeException(response.errorBody().string());
+        }
     }
 }
