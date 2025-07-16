@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
-import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.example.stockcalculator.transaction.service.UnsoldStockTransactionsService;
 import org.springframework.stereotype.Service;
 

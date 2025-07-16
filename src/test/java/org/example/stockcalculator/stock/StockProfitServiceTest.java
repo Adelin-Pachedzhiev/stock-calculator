@@ -6,7 +6,7 @@ import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.price.repository.StockPriceRepository;
-import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.example.stockcalculator.transaction.service.UnsoldStockTransactionsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

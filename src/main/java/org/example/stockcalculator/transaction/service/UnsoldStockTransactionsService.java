@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.example.stockcalculator.entity.StockTransaction;
-import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

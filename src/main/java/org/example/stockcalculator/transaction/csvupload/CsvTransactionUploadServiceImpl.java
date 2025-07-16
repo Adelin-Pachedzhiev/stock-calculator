@@ -9,7 +9,7 @@ import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.stock.repository.StockRepository;
-import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

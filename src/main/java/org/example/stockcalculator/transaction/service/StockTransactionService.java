@@ -6,7 +6,7 @@ import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.transaction.dto.TransactionPayload;
 import org.example.stockcalculator.transaction.mapper.StockTransactionMapper;
-import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;

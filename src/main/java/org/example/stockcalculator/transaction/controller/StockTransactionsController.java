@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.integration.StockTransactionManager;
-import org.example.stockcalculator.repository.StockTransactionRepository;
+import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.example.stockcalculator.transaction.dto.TransactionPayload;
 import org.example.stockcalculator.transaction.service.StockTransactionService;
 import org.springframework.web.bind.annotation.DeleteMapping;
