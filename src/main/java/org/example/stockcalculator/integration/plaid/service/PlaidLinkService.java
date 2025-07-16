@@ -44,6 +44,9 @@ public class PlaidLinkService {
                 .clientName("Portfolio Tracker")
                 .user(user)
                 .products(List.of(Products.INVESTMENTS))
+                .addAdditionalConsentedProductsItem(Products.INVESTMENTS)
+                .addOptionalProductsItem(Products.INVESTMENTS)
+                .addRequiredIfSupportedProductsItem(Products.INVESTMENTS)
                 .language("en")
                 .countryCodes(List.of(US, CA));
 
