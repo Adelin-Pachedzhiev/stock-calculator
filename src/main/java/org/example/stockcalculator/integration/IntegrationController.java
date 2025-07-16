@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.dto.PlatformIntegrationResponse;
-import org.example.stockcalculator.repository.PlatformIntegrationJpaRepository;
+import org.example.stockcalculator.integration.repository.PlatformIntegrationJpaRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

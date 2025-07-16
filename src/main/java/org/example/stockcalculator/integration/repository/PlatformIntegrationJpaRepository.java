@@ -1,4 +1,4 @@
-package org.example.stockcalculator.repository;
+package org.example.stockcalculator.integration.repository;
 
 import java.util.List;
 

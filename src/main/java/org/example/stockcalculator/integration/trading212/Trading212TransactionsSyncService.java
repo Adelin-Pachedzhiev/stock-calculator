@@ -20,7 +20,7 @@ import org.example.stockcalculator.integration.trading212.dto.Trading212Instrume
 import org.example.stockcalculator.integration.trading212.dto.Trading212Transaction;
 import org.example.stockcalculator.integration.trading212.dto.Trading212UserInfo;
 import org.example.stockcalculator.integration.trading212.dto.TransactionTax;
-import org.example.stockcalculator.repository.PlatformIntegrationJpaRepository;
+import org.example.stockcalculator.integration.repository.PlatformIntegrationJpaRepository;
 import org.example.stockcalculator.repository.StockRepository;
 import org.example.stockcalculator.repository.StockTransactionRepository;
 import org.springframework.stereotype.Service;

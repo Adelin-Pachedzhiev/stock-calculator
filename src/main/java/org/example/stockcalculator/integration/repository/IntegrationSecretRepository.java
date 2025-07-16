@@ -1,4 +1,4 @@
-package org.example.stockcalculator.repository;
+package org.example.stockcalculator.integration.repository;
 
 import org.example.stockcalculator.entity.IntegrationSecret;
 import org.springframework.data.jpa.repository.JpaRepository;
