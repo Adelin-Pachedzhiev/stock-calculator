@@ -3,7 +3,7 @@ package org.example.stockcalculator.stock.info;
 import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
-import org.example.stockcalculator.repository.StockPriceRepository;
+import org.example.stockcalculator.price.repository.StockPriceRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

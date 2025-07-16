@@ -1,4 +1,4 @@
-package org.example.stockcalculator.repository;
+package org.example.stockcalculator.price.repository;
 
 import org.example.stockcalculator.entity.StockPriceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

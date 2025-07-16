@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.price.dto.StockPrice;
-import org.example.stockcalculator.repository.StockPriceRepository;
+import org.example.stockcalculator.price.repository.StockPriceRepository;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
