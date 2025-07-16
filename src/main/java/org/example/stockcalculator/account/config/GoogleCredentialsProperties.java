@@ -1,4 +1,4 @@
-package org.example.stockcalculator.auth.config;
+package org.example.stockcalculator.account.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

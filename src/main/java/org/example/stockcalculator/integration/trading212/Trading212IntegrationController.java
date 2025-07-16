@@ -1,6 +1,6 @@
 package org.example.stockcalculator.integration.trading212;
 
-import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
+import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 import static org.example.stockcalculator.integration.InstitutionNameConstants.TRADING212;
 
 import java.util.Map;

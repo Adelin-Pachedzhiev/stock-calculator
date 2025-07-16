@@ -1,12 +1,12 @@
-package org.example.stockcalculator.auth.controller;
+package org.example.stockcalculator.account.controller;
 
 import java.util.Map;
 import java.util.Optional;
 
-import org.example.stockcalculator.auth.service.GoogleTokenVerifierService;
-import org.example.stockcalculator.auth.service.JwtService;
+import org.example.stockcalculator.account.service.GoogleTokenVerifierService;
+import org.example.stockcalculator.account.service.JwtService;
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.auth.service.UserAccountService;
+import org.example.stockcalculator.account.service.UserAccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

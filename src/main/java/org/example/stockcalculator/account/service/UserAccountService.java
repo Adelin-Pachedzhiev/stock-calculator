@@ -1,9 +1,9 @@
-package org.example.stockcalculator.auth.service;
+package org.example.stockcalculator.account.service;
 
 import java.util.Optional;
 
 import org.example.stockcalculator.entity.UserAccount;
-import org.example.stockcalculator.repository.UserAccountRepository;
+import org.example.stockcalculator.account.repository.UserAccountRepository;
 import org.springframework.stereotype.Component;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;

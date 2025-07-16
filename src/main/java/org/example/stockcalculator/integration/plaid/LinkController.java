@@ -2,7 +2,7 @@ package org.example.stockcalculator.integration.plaid;
 
 import static com.plaid.client.model.CountryCode.CA;
 import static com.plaid.client.model.CountryCode.US;
-import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
+import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 
 import java.io.IOException;
 import java.util.List;

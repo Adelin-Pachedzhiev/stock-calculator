@@ -1,4 +1,4 @@
-package org.example.stockcalculator.auth.service;
+package org.example.stockcalculator.account.service;
 
 import java.security.Key;
 import java.util.Date;

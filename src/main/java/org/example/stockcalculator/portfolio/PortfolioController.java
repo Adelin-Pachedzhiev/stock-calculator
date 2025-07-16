@@ -4,7 +4,7 @@ import org.example.stockcalculator.portfolio.dto.PortfolioOverview;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.example.stockcalculator.auth.utils.AuthUtils;
+import org.example.stockcalculator.account.utils.AuthUtils;
 
 import lombok.RequiredArgsConstructor;
 

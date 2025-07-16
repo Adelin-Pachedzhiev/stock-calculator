@@ -1,4 +1,4 @@
-package org.example.stockcalculator.auth.utils;
+package org.example.stockcalculator.account.utils;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;

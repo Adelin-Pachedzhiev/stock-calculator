@@ -1,6 +1,6 @@
 package org.example.stockcalculator.transaction.controller;
 
-import static org.example.stockcalculator.auth.utils.AuthUtils.currentUserId;
+import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package org.example.stockcalculator.repository;
+package org.example.stockcalculator.account.repository;
 
 import org.example.stockcalculator.entity.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
