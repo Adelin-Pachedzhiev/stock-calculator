@@ -17,7 +17,7 @@ public class PlatformIntegrationRepositoryImpl implements PlatformIntegrationRep
         PlatformIntegration platformIntegration = new PlatformIntegration();
         platformIntegration.setUserAccount(new UserAccount(userId));
         platformIntegration.setPlatform(platformName);
-        platformIntegration.setSecret(new IntegrationSecret(secret, platformIntegration)); //todo encrypt platformIntegration
+        platformIntegration.setSecret(new IntegrationSecret(secret)); //todo encrypt platformIntegration
 
         repository.save(platformIntegration);
     }

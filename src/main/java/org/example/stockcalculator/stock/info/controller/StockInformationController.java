@@ -1,8 +1,9 @@
-package org.example.stockcalculator.stock.info;
+package org.example.stockcalculator.stock.info.controller;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.example.stockcalculator.stock.info.service.StockInformationService;
 import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.price.dto.StockPrice;

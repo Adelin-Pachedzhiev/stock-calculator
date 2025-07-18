@@ -1,4 +1,4 @@
-package org.example.stockcalculator.transaction.csvupload;
+package org.example.stockcalculator.transaction.csvupload.service;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.TransactionType;
+import org.example.stockcalculator.transaction.csvupload.ValidationException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVReader;
@@ -25,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class BaseCsvTransactionParserService implements CsvTransactionParserService {
 
     @Override
-    public List<StockTransaction> parse(MultipartFile file) throws ValidationException{
+    public List<StockTransaction> parse(MultipartFile file) throws ValidationException {
         List<StockTransaction> transactions = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             String[] header = reader.readNext();

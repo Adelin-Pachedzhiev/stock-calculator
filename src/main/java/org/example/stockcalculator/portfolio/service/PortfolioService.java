@@ -1,8 +1,8 @@
 package org.example.stockcalculator.portfolio.service;
 
 import org.example.stockcalculator.portfolio.dto.PortfolioOverview;
-import org.example.stockcalculator.stock.profit.StockProfit;
-import org.example.stockcalculator.stock.profit.StockProfitService;
+import org.example.stockcalculator.stock.profit.dto.StockProfit;
+import org.example.stockcalculator.stock.profit.service.StockProfitService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

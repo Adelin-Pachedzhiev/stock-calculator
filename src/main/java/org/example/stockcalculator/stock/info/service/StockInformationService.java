@@ -1,4 +1,4 @@
-package org.example.stockcalculator.stock.info;
+package org.example.stockcalculator.stock.info.service;
 
 import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
 import org.example.stockcalculator.entity.Stock;

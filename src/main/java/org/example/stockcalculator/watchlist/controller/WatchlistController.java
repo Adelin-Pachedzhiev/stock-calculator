@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.example.stockcalculator.account.utils.AuthUtils;
-import org.example.stockcalculator.stock.info.StockInformationService;
+import org.example.stockcalculator.stock.info.service.StockInformationService;
 import org.example.stockcalculator.stock.info.dto.StockInformationResponse;
 import org.example.stockcalculator.watchlist.repository.WatchlistItemRepository;
 import org.example.stockcalculator.watchlist.service.WatchlistService;

@@ -1,7 +1,7 @@
 package org.example.stockcalculator.stock;
 
-import org.example.stockcalculator.stock.profit.StockProfit;
-import org.example.stockcalculator.stock.profit.StockProfitService;
+import org.example.stockcalculator.stock.profit.dto.StockProfit;
+import org.example.stockcalculator.stock.profit.service.StockProfitService;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.entity.StockTransaction;

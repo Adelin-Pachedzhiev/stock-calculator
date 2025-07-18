@@ -1,4 +1,4 @@
-package org.example.stockcalculator.stock.profit;
+package org.example.stockcalculator.stock.profit.controller;
 
 import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 
@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.example.stockcalculator.entity.Stock;
+import org.example.stockcalculator.stock.profit.dto.StockInvestmentProfitInfo;
+import org.example.stockcalculator.stock.profit.dto.StockProfit;
+import org.example.stockcalculator.stock.profit.service.StockProfitService;
 import org.example.stockcalculator.stock.repository.StockRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;

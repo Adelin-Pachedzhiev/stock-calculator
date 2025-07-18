@@ -1,4 +1,4 @@
-package org.example.stockcalculator.stock.profit;
+package org.example.stockcalculator.stock.profit.dto;
 
 public record StockProfit(
         double profit,

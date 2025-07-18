@@ -1,4 +1,4 @@
-package org.example.stockcalculator.transaction.csvupload;
+package org.example.stockcalculator.transaction.csvupload.service;
 
 import static java.time.ZoneOffset.UTC;
 import static org.example.stockcalculator.entity.TransactionType.BUY;

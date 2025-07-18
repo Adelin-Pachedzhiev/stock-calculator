@@ -1,4 +1,4 @@
-package org.example.stockcalculator.transaction.csvupload;
+package org.example.stockcalculator.transaction.csvupload.service;
 
 import java.util.List;
 
