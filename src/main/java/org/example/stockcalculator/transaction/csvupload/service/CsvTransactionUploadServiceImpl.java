@@ -26,7 +26,7 @@ public class CsvTransactionUploadServiceImpl implements CsvTransactionUploadServ
 
     @Override
     public void handleUpload(MultipartFile file, String institution) {
-        CsvTransactionParserService parser = resolver.resolve(institution);
+        CsvTransactionParser parser = resolver.resolve(institution);
         if (parser == null) {
             throw new ValidationException("Unsupported institution: " + institution);
         }

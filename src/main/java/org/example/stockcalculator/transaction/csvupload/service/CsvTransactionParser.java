@@ -5,7 +5,7 @@ import java.util.List;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface CsvTransactionParserService {
+public interface CsvTransactionParser {
 
     List<StockTransaction> parse(MultipartFile file);
 

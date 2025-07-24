@@ -8,9 +8,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CsvTransactionParserStrategyResolver {
-    private final List<CsvTransactionParserService> parserServices;
+    private final List<CsvTransactionParser> parserServices;
 
-    public CsvTransactionParserService resolve(String institution) {
+    public CsvTransactionParser resolve(String institution) {
         return parserServices.stream()
                 .filter(s -> s.getInstitution().equalsIgnoreCase(institution))
                 .findFirst()

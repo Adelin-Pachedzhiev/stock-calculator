@@ -13,7 +13,7 @@ import org.example.stockcalculator.entity.TransactionType;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RevolutCsvTransactionParserService extends BaseCsvTransactionParserService {
+public class RevolutCsvTransactionParser extends CsvTransactionParserBase {
 
     @Override
     protected String getQuantityColumnName() {

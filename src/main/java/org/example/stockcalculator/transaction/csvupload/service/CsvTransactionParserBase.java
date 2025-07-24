@@ -23,7 +23,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class BaseCsvTransactionParserService implements CsvTransactionParserService {
+public abstract class CsvTransactionParserBase implements CsvTransactionParser {
 
     @Override
     public List<StockTransaction> parse(MultipartFile file)
