@@ -26,14 +26,14 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class BaseCsvTransactionParserService implements CsvTransactionParserService {
 
     @Override
-    public List<StockTransaction> parse(MultipartFile file) throws ValidationException {
+    public List<StockTransaction> parse(MultipartFile file)
+            throws ValidationException {
         List<StockTransaction> transactions = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             String[] header = reader.readNext();
             if (header == null) {
                 throw new ValidationException("CSV file is empty");
             }
-            log.info("CSV header: {}", String.join(",", header)); //todo delete
 
             Map<String, Integer> colIndex = new HashMap<>();
             for (int i = 0; i < header.length; i++) {
@@ -63,18 +63,10 @@ public abstract class BaseCsvTransactionParserService implements CsvTransactionP
         Optional<LocalDateTime> time = parseDate(rowMap);
         Optional<String> symbol = getValue(rowMap, getSymbolColumnName(), String::valueOf);
         Optional<TransactionType> type = determineTransactionType(rowMap);
-        // Fee is optional
+
         double fee = getValue(rowMap, getFeeColumnName(), Double::parseDouble).orElse(0.0);
 
         if (Stream.of(quantity, price, currency, time, symbol, type).anyMatch(Optional::isEmpty)) {
-            log.warn("Skipping transaction due to missing data: {}", rowMap);
-            log.warn("Missing fields - Quantity: {}, Price: {}, Currency: {}, Time: {}, Symbol: {}, Type: {}",
-                    quantity.isEmpty() ? "N/A" : quantity.get(),
-                    price.isEmpty() ? "N/A" : price.get(),
-                    currency.isEmpty() ? "N/A" : currency.get(),
-                    time.isEmpty() ? "N/A" : time.get(),
-                    symbol.isEmpty() ? "N/A" : symbol.get(),
-                    type.isEmpty() ? "N/A" : type.get());
             return Optional.empty();
         }
 
@@ -100,12 +92,16 @@ public abstract class BaseCsvTransactionParserService implements CsvTransactionP
 
     protected <T> Optional<T> getValue(Map<String, String> rowMap, String columnName, Function<String, T> converter) {
         String value = rowMap.get(columnName);
-        if (value != null && !value.isEmpty()) {
+        if (value == null) {
+            throw new ValidationException("Column '" + columnName + "' not found in the CSV.");
+        }
+
+        if (!value.isEmpty()) {
             try {
                 return Optional.of(converter.apply(value));
             }
             catch (Exception e) {
-                return Optional.empty();
+                throw new ValidationException(e);
             }
         }
         return Optional.empty();
@@ -121,9 +117,9 @@ public abstract class BaseCsvTransactionParserService implements CsvTransactionP
 
     protected abstract String getSymbolColumnName();
 
-    protected String getFeeColumnName(){
+    protected String getFeeColumnName() {
         return "Fee";
-    };
+    }
 
     protected Optional<TransactionType> determineTransactionType(Map<String, String> row) {
         String quantityStr = row.get(getQuantityColumnName());
