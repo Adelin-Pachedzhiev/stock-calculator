@@ -16,6 +16,7 @@ import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.integration.TransactionsSyncService;
+import org.example.stockcalculator.integration.repository.IntegrationSecretRepository;
 import org.example.stockcalculator.integration.trading212.dto.Trading212InstrumentMetadata;
 import org.example.stockcalculator.integration.trading212.dto.Trading212Transaction;
 import org.example.stockcalculator.integration.trading212.dto.Trading212UserInfo;
@@ -37,11 +38,12 @@ public class Trading212TransactionsSyncService implements TransactionsSyncServic
     private final Trading212ApiClient apiClient;
     private final StockTransactionRepository stockTransactionRepository;
     private final PlatformIntegrationJpaRepository platformIntegrationRepository;
+    private final IntegrationSecretRepository integrationSecretRepository;
     private final StockRepository stockRepository;
 
     @Override
     public void syncTransactions(PlatformIntegration integration) {
-        IntegrationSecret integrationSecret = integration.getSecret();
+        IntegrationSecret integrationSecret = integrationSecretRepository.findByIntegrationId(integration.getId());
         String secret = integrationSecret.getSecret();
 
         Trading212UserInfo userInfo = apiClient.getUserInfo(secret);

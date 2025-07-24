@@ -41,11 +41,6 @@ public class PlatformIntegration {
     @Column(nullable = false)
     private String platform;
 
-    @OneToOne(cascade = ALL, optional = false)
-    @JoinColumn(nullable = false)
-    @JsonBackReference
-    private IntegrationSecret secret;
-
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime lastChangedAt;

@@ -2,12 +2,10 @@ package org.example.stockcalculator.integration.plaid.service;
 
 import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 import static org.example.stockcalculator.entity.Platform.PLAID;
-import static org.example.stockcalculator.entity.TransactionType.*;
+import static org.example.stockcalculator.entity.TransactionType.BUY;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -17,16 +15,15 @@ import org.example.stockcalculator.entity.Platform;
 import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
-import org.example.stockcalculator.entity.TransactionType;
 import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.integration.TransactionsSyncService;
+import org.example.stockcalculator.integration.repository.IntegrationSecretRepository;
 import org.example.stockcalculator.stock.repository.StockRepository;
 import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.springframework.stereotype.Component;
 
 import com.plaid.client.model.Holding;
 import com.plaid.client.model.InvestmentsHoldingsGetRequest;
-import com.plaid.client.model.InvestmentsTransactionsGetRequest;
 import com.plaid.client.model.Security;
 import com.plaid.client.request.PlaidApi;
 
@@ -41,10 +38,12 @@ public class PlaidTransactionsSyncService implements TransactionsSyncService {
     private final PlaidApi plaidApi;
     private final StockRepository stockRepository;
     private final StockTransactionRepository stockTransactionRepository;
+    private final IntegrationSecretRepository integrationSecretRepository;
 
     @Override
     public void syncTransactions(PlatformIntegration integration) {
-        String accessToken = integration.getSecret().getSecret();
+        String accessToken = integrationSecretRepository.findByIntegrationId(integration.getId()).getSecret();
+
         InvestmentsHoldingsGetRequest request = new InvestmentsHoldingsGetRequest();
         request.accessToken(accessToken);
 

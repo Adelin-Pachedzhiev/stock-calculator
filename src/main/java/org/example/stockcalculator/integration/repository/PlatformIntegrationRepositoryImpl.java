@@ -11,19 +11,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlatformIntegrationRepositoryImpl implements PlatformIntegrationRepository {
 
-    private final PlatformIntegrationJpaRepository repository;
+    private final PlatformIntegrationJpaRepository integrationRepository;
+    private final IntegrationSecretRepository integrationSecretRepository;
 
     public void saveIntegrationAndSecret(String secret, Long userId, String platformName ) {
         PlatformIntegration platformIntegration = new PlatformIntegration();
         platformIntegration.setUserAccount(new UserAccount(userId));
         platformIntegration.setPlatform(platformName);
-        platformIntegration.setSecret(new IntegrationSecret(secret)); //todo encrypt platformIntegration
 
-        repository.save(platformIntegration);
+        PlatformIntegration savedPlatformIntegration = integrationRepository.save(platformIntegration);
+
+        IntegrationSecret integrationSecret = new IntegrationSecret();
+        integrationSecret.setSecret(secret);//todo encrypt platformIntegration
+        integrationSecret.setIntegration(savedPlatformIntegration);
+        integrationSecretRepository.save(integrationSecret);
     }
 
     public String findAccessToken(Long userId, String platformName) {
-        return repository.findByUserAccountIdAndPlatform(userId, platformName).getSecret().getSecret(); //todo decrypt secret
+        PlatformIntegration platformIntegration = integrationRepository.findByUserAccountIdAndPlatform(userId, platformName);
+        return integrationSecretRepository.findByIntegrationId(platformIntegration.getId()).getSecret();
     }
 
 }
