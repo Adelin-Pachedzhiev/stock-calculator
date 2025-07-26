@@ -1,11 +1,13 @@
 package org.example.stockcalculator.integration.trading212;
 
+import static org.example.stockcalculator.util.SleepUtil.sleepSilentlyForSeconds;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.example.stockcalculator.config.StockTransactionApiProperties;
 import org.example.stockcalculator.integration.trading212.dto.Trading212InstrumentMetadata;
@@ -17,6 +19,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.RequiredArgsConstructor;
@@ -78,10 +81,29 @@ public class Trading212ApiClient {
 
     public Trading212UserInfo getUserInfo(String secret) {
         HttpHeaders headers = createHeadersWithSecret(secret);
-
         String url = apiProperties.url() + USER_ACCOUNT_INFO_PATH;
+        return executeWithRetryOn529(() -> restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212UserInfo.class).getBody());
+    }
 
-        return restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212UserInfo.class).getBody();
+    private <T> T executeWithRetryOn529(Supplier<T> action) {
+        int maxRetries = 6;
+        int attempt = 0;
+        while (attempt < maxRetries) {
+            try {
+                return action.get();
+            } catch (HttpClientErrorException e) {
+                if (e.getStatusCode().value() == 529) {
+                    attempt++;
+                    log.warn("Received 529 Too Many Requests from Trading212. Attempt {} of {}. Retrying in 10 seconds...", attempt, maxRetries);
+                    sleepSilentlyForSeconds(10);
+                } else {
+                    throw e;
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException("Unexpected exception during Trading212 API call", ex);
+            }
+        }
+        throw new RuntimeException("Failed to complete Trading212 API call after " + maxRetries + " attempts due to repeated 529 errors.");
     }
 
     private Trading212TransactionsResponse getTransactionsFromPath(String path, String secret) {
