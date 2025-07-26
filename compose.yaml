@@ -15,6 +15,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       PLAID_ENVIRONMENT: ${PLAID_ENVIRONMENT}
       PLAID_SECRET: ${PLAID_SECRET}
+      SECRETS_ENCRYPTION_KEY: ${SECRETS_ENCRYPTION_KEY}
     depends_on:
       - db
   db:
