@@ -1,5 +1,8 @@
 package org.example.stockcalculator.entity;
 
+import org.example.stockcalculator.entity.encrypt.IntegrationSecretConverter;
+
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +20,8 @@ public class IntegrationSecret {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Convert(converter = IntegrationSecretConverter.class)
     private String secret;
 
     @OneToOne
