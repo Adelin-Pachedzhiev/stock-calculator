@@ -52,7 +52,7 @@ class StockProfitServiceTest {
         price.setPrice(120.0);
         when(stockPriceRepository.findTopByStockSymbolOrderByTimestampDesc(symbol)).thenReturn(price);
 
-        Map<String, StockProfit> result = stockProfitService.calculateProfitForSymbolWithInvestmentInfo(userId);
+        Map<String, StockProfit> result = stockProfitService.calculateProfitBySymbol(userId);
         StockProfit profit = result.get(symbol);
         assertNotNull(profit);
         assertEquals(39.0, profit.profit(), 0.0001); // (120-100)*2 - 1 = 39
@@ -72,7 +72,7 @@ class StockProfitServiceTest {
         when(unsoldStockTransactionsService.getUnsoldStockTransactions(userId, symbol)).thenReturn(Collections.emptyList());
         when(stockPriceRepository.findTopByStockSymbolOrderByTimestampDesc(symbol)).thenReturn(null);
 
-        Map<String, StockProfit> result = stockProfitService.calculateProfitForSymbolWithInvestmentInfo(userId);
+        Map<String, StockProfit> result = stockProfitService.calculateProfitBySymbol(userId);
         StockProfit profit = result.get(symbol);
         assertNotNull(profit);
         assertEquals(0.0, profit.profit(), 0.0001);
@@ -104,7 +104,7 @@ class StockProfitServiceTest {
         price.setPrice(120.0);
         when(stockPriceRepository.findTopByStockSymbolOrderByTimestampDesc(symbol)).thenReturn(price);
 
-        Map<String, StockProfit> result = stockProfitService.calculateProfitForSymbolWithInvestmentInfo(userId);
+        Map<String, StockProfit> result = stockProfitService.calculateProfitBySymbol(userId);
         StockProfit profit = result.get(symbol);
         assertNotNull(profit);
         // profit: (120-100)*1-1 + (120-110)*2-2 = 19 + 8 + 8 = 33

@@ -26,11 +26,11 @@ public class StockProfitService {
     private final UnsoldStockTransactionsService unsoldStockTransactionsService;
 
     public StockProfit calculateTotalProfit(Long userId) {
-        Map<String, StockProfit> profitByStock = calculateProfitForSymbolWithInvestmentInfo(userId);
+        Map<String, StockProfit> profitByStock = calculateProfitBySymbol(userId);
         return averageProfits(profitByStock.values());
     }
 
-    public Map<String, StockProfit> calculateProfitForSymbolWithInvestmentInfo(Long userId) {
+    public Map<String, StockProfit> calculateProfitBySymbol(Long userId) {
         List<Stock> stockSymbolsOfTransactions = stockTransactionRepository.findStockSymbolsOfTransactionsByUserId(userId);
         return stockSymbolsOfTransactions.stream()
                 .map(stock -> Map.entry(stock.getSymbol(), buildStockProfit(userId, stock.getSymbol())))
