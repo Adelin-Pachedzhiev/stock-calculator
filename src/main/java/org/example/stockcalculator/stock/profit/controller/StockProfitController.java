@@ -28,7 +28,7 @@ public class StockProfitController {
     @GetMapping
     public List<StockInvestmentProfitInfo> calculate() {
         Long userId = currentUserId();
-        return stockProfitService.calculateProfitForSymbolWithInvestmentInfo(userId).entrySet().stream()
+        return stockProfitService.calculateProfitBySymbol(userId).entrySet().stream()
             .map(this::convertToProfitInfo)
             .toList();
     }

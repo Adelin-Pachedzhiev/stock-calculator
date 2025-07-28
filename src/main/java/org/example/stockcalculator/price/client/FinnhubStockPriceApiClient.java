@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class StockPriceApiClientImpl implements StockPriceApiClient{
+public class FinnhubStockPriceApiClient implements StockPriceApiClient{
 
     private final RestTemplate restTemplate;
     private final StockApiProperties stockApiProperties;
