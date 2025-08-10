@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockTransaction;
@@ -57,30 +56,26 @@ public abstract class CsvTransactionParserBase implements CsvTransactionParser {
     }
 
     private Optional<StockTransaction> parseToTransactionEntity(Map<String, String> rowMap) {
-        Optional<Double> quantity = getValue(rowMap, getQuantityColumnName(), Double::parseDouble);
-        Optional<Double> price = getValue(rowMap, getPriceColumnName(), this::convertPrice);
-        Optional<String> currency = getValue(rowMap, getCurrencyColumnName(), String::valueOf);
-        Optional<LocalDateTime> time = parseDate(rowMap);
-        Optional<String> symbol = getValue(rowMap, getSymbolColumnName(), String::valueOf);
-        Optional<TransactionType> type = determineTransactionType(rowMap);
+        Double quantity = getValueOrThrow(rowMap, getQuantityColumnName(), Double::parseDouble);
+        Double price = getValueOrThrow(rowMap, getPriceColumnName(), this::convertPrice);
+        String currency = getValueOrThrow(rowMap, getCurrencyColumnName(), String::valueOf);
+        LocalDateTime time = parseDate(rowMap);
+        String symbol = getValueOrThrow(rowMap, getSymbolColumnName(), String::valueOf);
+        TransactionType type = determineTransactionType(rowMap);
 
-        double fee = getValue(rowMap, getFeeColumnName(), Double::parseDouble).orElse(0.0);
-
-        if (Stream.of(quantity, price, currency, time, symbol, type).anyMatch(Optional::isEmpty)) {
-            return Optional.empty();
-        }
+        double fee = getOptionalValue(rowMap, getFeeColumnName(), Double::parseDouble).orElse(0.0);
 
         log.info("Transaction entity: {}", rowMap);
 
         StockTransaction tx = new StockTransaction();
-        tx.setQuantity(quantity.get());
-        tx.setPrice(price.get());
-        tx.setCurrency(currency.get());
-        tx.setTimeOfTransaction(time.get());
-        tx.setType(type.get());
+        tx.setQuantity(quantity);
+        tx.setPrice(price);
+        tx.setCurrency(currency);
+        tx.setTimeOfTransaction(time);
+        tx.setType(type);
         tx.setFee(fee);
         Stock stock = new Stock();
-        stock.setSymbol(symbol.get());
+        stock.setSymbol(symbol);
         tx.setStock(stock);
         return Optional.of(tx);
     }
@@ -90,21 +85,31 @@ public abstract class CsvTransactionParserBase implements CsvTransactionParser {
         return Double.parseDouble(priceStr);
     }
 
-    protected <T> Optional<T> getValue(Map<String, String> rowMap, String columnName, Function<String, T> converter) {
+    protected <T> Optional<T> getOptionalValue(Map<String, String> rowMap, String columnName, Function<String, T> converter) {
+        try {
+            T resolvedValue = getValueOrThrow(rowMap, columnName, converter);
+            return Optional.of(resolvedValue);
+        }
+        catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    protected <T> T getValueOrThrow(Map<String, String> rowMap, String columnName, Function<String, T> converter) {
         String value = rowMap.get(columnName);
         if (value == null) {
             throw new ValidationException("Column '" + columnName + "' not found in the CSV.");
         }
 
-        if (!value.isEmpty()) {
-            try {
-                return Optional.of(converter.apply(value));
-            }
-            catch (Exception e) {
-                throw new ValidationException(e);
-            }
+        if (value.isEmpty()) {
+            throw new ValidationException("Column '" + columnName + "' is empty in the CSV.");
         }
-        return Optional.empty();
+        try {
+            return converter.apply(value);
+        }
+        catch (Exception e) {
+            throw new ValidationException(e);
+        }
     }
 
     protected abstract String getQuantityColumnName();
@@ -121,26 +126,27 @@ public abstract class CsvTransactionParserBase implements CsvTransactionParser {
         return "Fee";
     }
 
-    protected Optional<TransactionType> determineTransactionType(Map<String, String> row) {
+    protected TransactionType determineTransactionType(Map<String, String> row) {
         String quantityStr = row.get(getQuantityColumnName());
         try {
             double qty = Double.parseDouble(quantityStr);
-            return Optional.of(qty >= 0 ? TransactionType.BUY : TransactionType.SELL);
+            return qty >= 0 ? TransactionType.BUY : TransactionType.SELL;
         }
         catch (Exception e) {
-            return Optional.empty();
+            throw new ValidationException("Could not determine transaction type: " + e.getMessage());
         }
     }
 
     public abstract String getInstitution();
 
-    protected Optional<LocalDateTime> parseDate(Map<String, String> row) {
+    protected LocalDateTime parseDate(Map<String, String> row)
+            throws ValidationException {
         String value = row.get(getDateColumnName().toLowerCase());
         try {
-            return Optional.of(LocalDateTime.parse(value));
+            return LocalDateTime.parse(value);
         }
         catch (Exception e) {
-            return Optional.empty();
+            throw new ValidationException("Could not parse date: " + e.getMessage());
         }
     }
-} 
+}

@@ -7,9 +7,9 @@ import static org.example.stockcalculator.entity.TransactionType.SELL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Optional;
 
 import org.example.stockcalculator.entity.TransactionType;
+import org.example.stockcalculator.transaction.csvupload.ValidationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,21 +41,21 @@ public class RevolutCsvTransactionParser extends CsvTransactionParserBase {
     }
 
     @Override
-    protected Optional<TransactionType> determineTransactionType(Map<String, String> row) {
+    protected TransactionType determineTransactionType(Map<String, String> row) {
         String type = row.get("Type");
 
         if (type == null) {
-            return Optional.empty();
+            throw new ValidationException("No 'Type' column found in the CSV.");
         }
 
         if (type.contains("BUY")) {
-            return Optional.of(BUY);
+            return BUY;
         }
         else if (type.contains("SELL")) {
-            return Optional.of(SELL);
+            return SELL;
         }
 
-        return Optional.empty();
+        throw new ValidationException("Unknown transaction type '" + type + "'.");
     }
 
     @Override
@@ -64,13 +64,13 @@ public class RevolutCsvTransactionParser extends CsvTransactionParserBase {
     }
 
     @Override
-    protected Optional<LocalDateTime> parseDate(Map<String, String> row) {
+    protected LocalDateTime parseDate(Map<String, String> row) {
         String dateColValue = row.get(getDateColumnName());
         if (dateColValue == null || dateColValue.isEmpty()) {
-            return Optional.empty();
+            throw new ValidationException("Date column '" + getDateColumnName() + "' is missing or empty in the CSV.");
         }
 
         Instant instant = Instant.parse(dateColValue);
-        return Optional.of(LocalDateTime.ofInstant(instant, UTC));
+        return LocalDateTime.ofInstant(instant, UTC);
     }
 } 
