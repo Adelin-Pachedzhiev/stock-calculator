@@ -30,16 +30,15 @@ public class StockTransactionsController {
 
     private final StockTransactionService stockTransactionService;
     private final StockTransactionRepository stockTransactionRepository;
-    private final StockTransactionManager manager;
 
     @GetMapping
     public List<StockTransaction> getAllTransactions(@RequestParam(required = false) String symbol) {
         Long userId = currentUserId();
 
         if (symbol == null) {
-            return stockTransactionRepository.findByUserIdOrderByTimeOfTransactionAsc(userId);
+            return stockTransactionRepository.findByUserIdOrderByTimeOfTransactionDesc(userId);
         }
-        return stockTransactionRepository.findByUserIdAndStockSymbolOrderByTimeOfTransactionAsc(userId, symbol.toUpperCase());
+        return stockTransactionRepository.findByUserIdAndStockSymbolOrderByTimeOfTransactionDesc(userId, symbol.toUpperCase());
     }
 
     @GetMapping("/{transactionId}")
