@@ -1,5 +1,7 @@
 package org.example.stockcalculator.entity;
 
+import static org.example.stockcalculator.entity.UserRole.*;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +21,10 @@ public class UserAccount {
     @Column(unique = true)
     private String email;
     private String pictureUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole userRole;
 
 
     public UserAccount(Long id){

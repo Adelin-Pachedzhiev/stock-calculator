@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.account.repository.UserAccountRepository;
+import org.example.stockcalculator.entity.UserRole;
 import org.springframework.stereotype.Component;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -28,6 +29,7 @@ public class UserAccountService {
         userAccount.setGivenName(payload.get("given_name").toString());
         userAccount.setFamilyName(payload.get("family_name").toString());
         userAccount.setPictureUrl(payload.get("picture").toString());
+        userAccount.setUserRole(UserRole.USER);
 
         return userRepository.save(userAccount);
     }
