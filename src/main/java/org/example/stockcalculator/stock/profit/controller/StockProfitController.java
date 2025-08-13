@@ -3,15 +3,12 @@ package org.example.stockcalculator.stock.profit.controller;
 import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 
 import java.util.List;
-import java.util.Map;
 
-import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.stock.profit.dto.StockInvestmentProfitInfo;
 import org.example.stockcalculator.stock.profit.dto.StockProfit;
 import org.example.stockcalculator.stock.profit.service.StockProfitService;
-import org.example.stockcalculator.stock.repository.StockRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,25 +20,20 @@ import lombok.RequiredArgsConstructor;
 public class StockProfitController {
 
     private final StockProfitService stockProfitService;
-    private final StockRepository stockRepository; 
 
     @GetMapping
     public List<StockInvestmentProfitInfo> calculate() {
-        Long userId = currentUserId();
-        return stockProfitService.calculateProfitBySymbol(userId).entrySet().stream()
-            .map(this::convertToProfitInfo)
-            .toList();
-    }
-
-    @NotNull
-    private StockInvestmentProfitInfo convertToProfitInfo(Map.Entry<String, StockProfit> entry) {
-        Stock stock = stockRepository.findBySymbol(entry.getKey()).orElseThrow();
-        return new StockInvestmentProfitInfo(stock, entry.getValue());
+        return stockProfitService.calculateProfitInfoBySymbol();
     }
 
     @GetMapping("/total")
     public StockProfit calculateTotalProfit() {
         Long userId = currentUserId();
         return stockProfitService.calculateTotalProfit(userId);
+    }
+
+    @GetMapping("/{stockSymbol}")
+    public StockProfit calculateProfitBySymbol(@PathVariable String stockSymbol) {
+        return stockProfitService.calculateProfitForSymbol(stockSymbol);
     }
 }

@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @ConditionalOnProperty(name = "stock.prices-api.enabled", havingValue = "true", matchIfMissing = true)
 public class StockPricePersister {
 
-    private static final int API_REQUESTS_PER_MINUTE_LIMIT = 60;
+    private static final int DELAY_SECONDS_AFTER_REQUEST = 2;
     private final StockPriceApiClient stockPriceApiClient;
     private final StockPriceRepository stockPriceRepository;
     private final StockRepository stockRepository;
@@ -52,17 +52,10 @@ public class StockPricePersister {
 
     private void getStocksAndPersistTheirPrices() {
         List<Stock> supportedStocks = stockRepository.findAll();
-        int delayBetweenRequests = calculateDelayBetweenRequests(supportedStocks);
         supportedStocks.forEach((stock -> {
-            sleepSilentlyForSeconds(delayBetweenRequests);
+            sleepSilentlyForSeconds(DELAY_SECONDS_AFTER_REQUEST);
             getPriceAndSaveToDb(stock);
         }));
-    }
-
-    private int calculateDelayBetweenRequests(List<Stock> supportedStocks) {
-        int stocksCount = supportedStocks.size();
-        int requestsForAStockPerMinute = API_REQUESTS_PER_MINUTE_LIMIT / stocksCount;
-        return 60 / requestsForAStockPerMinute;
     }
 
     private void getPriceAndSaveToDb(Stock stock) {

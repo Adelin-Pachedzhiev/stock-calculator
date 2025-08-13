@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StockInformationController {
 
-    public final StockRepository stockRepository;
     public final StockPriceService stockPriceService;
     public final StockInformationService stockInformationService;
 
@@ -32,7 +31,7 @@ public class StockInformationController {
 
     @GetMapping
     public List<Stock> getAvailableStocks() {
-        return stockRepository.findAll();
+        return stockInformationService.getAvailableStocks();
     }
 
     @GetMapping("/information/{stockSymbol}")

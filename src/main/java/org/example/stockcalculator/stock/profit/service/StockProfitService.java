@@ -1,6 +1,7 @@
 package org.example.stockcalculator.stock.profit.service;
 
 import static java.util.stream.Collectors.toMap;
+import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +11,9 @@ import org.example.stockcalculator.entity.Stock;
 import org.example.stockcalculator.entity.StockPriceEntity;
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.price.repository.StockPriceRepository;
+import org.example.stockcalculator.stock.profit.dto.StockInvestmentProfitInfo;
 import org.example.stockcalculator.stock.profit.dto.StockProfit;
+import org.example.stockcalculator.stock.repository.StockRepository;
 import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.example.stockcalculator.transaction.service.UnsoldStockTransactionsService;
 import org.springframework.stereotype.Component;
@@ -24,21 +27,40 @@ public class StockProfitService {
     private final StockTransactionRepository stockTransactionRepository;
     private final StockPriceRepository stockPriceRepository;
     private final UnsoldStockTransactionsService unsoldStockTransactionsService;
+    private final StockRepository stockRepository;
+
 
     public StockProfit calculateTotalProfit(Long userId) {
         Map<String, StockProfit> profitByStock = calculateProfitBySymbol(userId);
         return averageProfits(profitByStock.values());
     }
 
+    public StockProfit calculateProfitForSymbol(String stockSymbol) {
+        Long userId = currentUserId();
+        return calculateProfitForSymbol(userId, stockSymbol);
+    }
+
     public Map<String, StockProfit> calculateProfitBySymbol(Long userId) {
         List<Stock> stockSymbolsOfTransactions = stockTransactionRepository.findStockSymbolsOfTransactionsByUserId(userId);
         return stockSymbolsOfTransactions.stream()
-                .map(stock -> Map.entry(stock.getSymbol(), buildStockProfit(userId, stock.getSymbol())))
+                .map(stock -> Map.entry(stock.getSymbol(), calculateProfitForSymbol(userId, stock.getSymbol())))
                 .filter(entry -> entry.getValue().totalShares() > 0.0001)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    private StockProfit buildStockProfit(Long userId, String stockSymbol) {
+    public List<StockInvestmentProfitInfo> calculateProfitInfoBySymbol(){
+        Long userId = currentUserId();
+        return calculateProfitBySymbol(userId).entrySet().stream()
+            .map(this::convertToProfitInfo)
+            .toList();
+    }
+
+    private StockInvestmentProfitInfo convertToProfitInfo(Map.Entry<String, StockProfit> entry) {
+        Stock stock = stockRepository.findBySymbol(entry.getKey()).orElseThrow();
+        return new StockInvestmentProfitInfo(stock, entry.getValue());
+    }
+
+    private StockProfit calculateProfitForSymbol(Long userId, String stockSymbol) {
         List<StockTransaction> remainingBuys = unsoldStockTransactionsService.getUnsoldStockTransactions(userId, stockSymbol);
         StockPriceEntity currentPriceOfStock = stockPriceRepository.findTopByStockSymbolOrderByTimestampDesc(stockSymbol);
 
