@@ -1,5 +1,6 @@
 package org.example.stockcalculator.util;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static lombok.AccessLevel.PRIVATE;
 
 import lombok.NoArgsConstructor;
@@ -8,9 +9,8 @@ import lombok.NoArgsConstructor;
 public class SleepUtil {
 
     public static void sleepSilentlyForSeconds(long seconds) {
-        long millis = seconds * 1000;
         try {
-            Thread.sleep(millis);
+            SECONDS.sleep(seconds);
         }
         catch (InterruptedException e) {
             Thread.currentThread().interrupt();
