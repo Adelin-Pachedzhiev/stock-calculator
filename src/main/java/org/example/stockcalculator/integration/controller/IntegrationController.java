@@ -7,6 +7,7 @@ import java.util.List;
 import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.StockTransactionManager;
 import org.example.stockcalculator.integration.dto.PlatformIntegrationResponse;
+import org.example.stockcalculator.integration.repository.IntegrationSecretRepository;
 import org.example.stockcalculator.integration.repository.PlatformIntegrationJpaRepository;
 import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class IntegrationController {
     private final PlatformIntegrationJpaRepository integrationRepository;
     private final StockTransactionManager stockTransactionManager;
     private final StockTransactionRepository stockTransactionRepository;
+    private final IntegrationSecretRepository integrationSecretRepository;
 
     @GetMapping
     public ResponseEntity<?> getIntegrations() {
@@ -52,6 +54,7 @@ public class IntegrationController {
     @Transactional
     public ResponseEntity<?> deleteIntegration(@PathVariable Long integrationId) {
         stockTransactionRepository.deleteByPlatformIntegrationId(integrationId);
+        integrationSecretRepository.deleteByIntegrationId(integrationId);
         integrationRepository.deleteById(integrationId);
 
         return ResponseEntity.ok(integrationId);

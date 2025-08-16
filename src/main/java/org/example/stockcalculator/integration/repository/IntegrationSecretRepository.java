@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface IntegrationSecretRepository extends JpaRepository<IntegrationSecret, Long> {
 
     IntegrationSecret findByIntegrationId(Long integrationId);
+
+    void deleteByIntegrationId(Long integrationId);
 }
