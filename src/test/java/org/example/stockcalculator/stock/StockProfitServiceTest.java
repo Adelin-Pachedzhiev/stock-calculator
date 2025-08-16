@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -44,22 +45,13 @@ class StockProfitServiceTest {
     @Mock
     private StockRepository stockRepository;
 
+    @InjectMocks
     private StockProfitService stockProfitService;
 
     private static final Long TEST_USER_ID = 1L;
     private static final String APPLE_SYMBOL = "AAPL";
     private static final String GOOGLE_SYMBOL = "GOOGL";
     private static final double PRECISION = 0.0001;
-
-    @BeforeEach
-    void setUp() {
-        stockProfitService = new StockProfitService(
-            stockTransactionRepository,
-            stockPriceRepository,
-            unsoldStockTransactionsService,
-            stockRepository
-        );
-    }
 
     @Nested
     class CalculateProfitBySymbolTests {
