@@ -25,10 +25,10 @@ public class UnsoldStockTransactionsService {
         List<StockTransaction> remainingBuys = new ArrayList<>();
 
         for (StockTransaction tx : transactionsForStock) {
-            if (tx.getType().equals(BUY)) {
+            if (BUY.equals(tx.getType())) {
                 remainingBuys.add(tx);
             }
-            else if (tx.getType().equals(SELL)) {
+            else if (SELL.equals(tx.getType())) {
                 matchSellWithBuyTransactions(tx, remainingBuys);
             }
             else {
@@ -42,7 +42,7 @@ public class UnsoldStockTransactionsService {
         double quantityToSell = tx.getQuantity();
 
         Iterator<StockTransaction> iterator = remainingBuys.iterator();
-        while (iterator.hasNext() && quantityToSell > 0) {
+        while (iterator.hasNext() && quantityToSell >= 0) {
             StockTransaction buyTx = iterator.next();
             double buyQty = buyTx.getQuantity();
 
