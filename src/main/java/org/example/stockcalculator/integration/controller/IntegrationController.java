@@ -34,10 +34,10 @@ public class IntegrationController {
     @GetMapping
     public ResponseEntity<?> getIntegrations() {
         Long userId = currentUserId();
-        List<PlatformIntegration> integrationSecrets = integrationRepository.findByUserAccountId(userId);
-        List<PlatformIntegrationResponse> responseList = integrationSecrets.stream()
-                .map(secret ->
-                        new PlatformIntegrationResponse(secret.getId(), secret.getPlatform(), secret.getLastChangedAt()))
+        List<PlatformIntegration> integrations = integrationRepository.findByUserAccountId(userId);
+        List<PlatformIntegrationResponse> responseList = integrations.stream()
+                .map(integration ->
+                        new PlatformIntegrationResponse(integration.getId(), integration.getPlatform(), integration.getLastSyncAt(), integration.getCreatedAt()))
                 .toList();
 
         return ResponseEntity.ok(responseList);
