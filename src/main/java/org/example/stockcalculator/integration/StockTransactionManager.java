@@ -2,6 +2,8 @@ package org.example.stockcalculator.integration;
 
 import static org.example.stockcalculator.integration.InstitutionNameConstants.TRADING212;
 
+import java.time.LocalDateTime;
+
 import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.plaid.service.PlaidTransactionsSyncService;
 import org.example.stockcalculator.integration.trading212.Trading212TransactionsSyncService;
@@ -20,8 +22,17 @@ public class StockTransactionManager {
     private final PlaidTransactionsSyncService plaidTransactionsSyncService;
     private final Trading212TransactionsSyncService trading212TransactionsSyncService;
 
+
     public void syncTransactionsToDbForIntegration(Long integrationId) {
         PlatformIntegration platformIntegration = platformIntegrationRepository.findById(integrationId).orElseThrow();
+
+        syncTransactions(platformIntegration);
+
+        platformIntegration.setLastSyncAt(LocalDateTime.now());
+        platformIntegrationRepository.save(platformIntegration);
+    }
+
+    private void syncTransactions(PlatformIntegration platformIntegration) {
         if (platformIntegration.getPlatform().equals(TRADING212)) {
             trading212TransactionsSyncService.syncTransactions(platformIntegration);
         }

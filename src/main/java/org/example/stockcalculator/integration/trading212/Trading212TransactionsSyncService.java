@@ -25,6 +25,7 @@ import org.example.stockcalculator.integration.repository.PlatformIntegrationJpa
 import org.example.stockcalculator.stock.repository.StockRepository;
 import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class Trading212TransactionsSyncService implements TransactionsSyncServic
     private final StockRepository stockRepository;
 
     @Override
+    @Transactional
     public void syncTransactions(PlatformIntegration integration) {
         IntegrationSecret integrationSecret = integrationSecretRepository.findByIntegrationId(integration.getId());
         String secret = integrationSecret.getSecret();
@@ -73,7 +75,6 @@ public class Trading212TransactionsSyncService implements TransactionsSyncServic
             platformIntegration.setLatestSyncedTransactionDate(localDateTimeOfLatestTransaction);
         }
 
-        platformIntegration.setLastSyncAt(LocalDateTime.now());
         platformIntegrationRepository.save(platformIntegration);
     }
 
