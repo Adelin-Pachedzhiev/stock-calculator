@@ -3,6 +3,7 @@ package org.example.stockcalculator.integration.trading212;
 import static org.example.stockcalculator.util.SleepUtil.sleepSilentlyForSeconds;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,6 +39,7 @@ public class Trading212ApiClient {
     private final RestTemplate restTemplate;
     private final StockTransactionApiProperties apiProperties;
 
+    @Transactional
     public List<Trading212Transaction> fetchTransactionsForIntegration(String secret, LocalDateTime toDate) {
         String currentPath = TRANSACTIONS_PATH + "?limit=50";
         List<Trading212Transaction> transactions = new ArrayList<>();
@@ -74,10 +77,10 @@ public class Trading212ApiClient {
 
         String url = apiProperties.url() + INSTRUMENTS_METADATA_PATH;
 
-        return restTemplate.exchange(url, GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Trading212InstrumentMetadata>>() {
+        return executeWithRetryOn529(()->restTemplate.exchange(url, GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Trading212InstrumentMetadata>>() {
 
                 })
-                .getBody();
+                .getBody());
     }
 
     public Trading212UserInfo getUserInfo(String secret) {
@@ -108,7 +111,7 @@ public class Trading212ApiClient {
             try {
                 return action.get();
             } catch (HttpClientErrorException e) {
-                if (e.getStatusCode().value() == 529) {
+                if (e.getStatusCode().isSameCodeAs(TOO_MANY_REQUESTS)) {
                     attempt++;
                     log.warn("Received 529 Too Many Requests from Trading212. Attempt {} of {}. Retrying in 10 seconds...", attempt, maxRetries);
                     sleepSilentlyForSeconds(10);
@@ -127,7 +130,7 @@ public class Trading212ApiClient {
 
         String url = apiProperties.url() + path;
 
-        return restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212TransactionsResponse.class).getBody();
+        return executeWithRetryOn529(()->restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212TransactionsResponse.class).getBody());
     }
 
     @NotNull
