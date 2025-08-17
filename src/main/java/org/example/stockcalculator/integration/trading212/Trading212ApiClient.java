@@ -3,6 +3,7 @@ package org.example.stockcalculator.integration.trading212;
 import static org.example.stockcalculator.util.SleepUtil.sleepSilentlyForSeconds;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -83,6 +84,21 @@ public class Trading212ApiClient {
         HttpHeaders headers = createHeadersWithSecret(secret);
         String url = apiProperties.url() + USER_ACCOUNT_INFO_PATH;
         return executeWithRetryOn529(() -> restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212UserInfo.class).getBody());
+    }
+
+    public boolean isTokenValid(String secret) {
+        try {
+            getUserInfo(secret);
+            return true;
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode().isSameCodeAs(UNAUTHORIZED)) {
+                return false;
+            }
+            throw e;
+        } catch (Exception ex) {
+            log.error("Unexpected error while validating token: {}", ex.getMessage());
+            return false;
+        }
     }
 
     private <T> T executeWithRetryOn529(Supplier<T> action) {
