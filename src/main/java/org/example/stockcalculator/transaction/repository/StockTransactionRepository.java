@@ -22,4 +22,6 @@ public interface StockTransactionRepository extends JpaRepository<StockTransacti
 
 
     void deleteByPlatformIntegrationId(Long platformIntegrationId);
+
+    void deleteByStockId(Long stockId);
 }

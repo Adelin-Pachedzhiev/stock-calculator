@@ -8,4 +8,6 @@ public interface StockPriceRepository extends JpaRepository<StockPriceEntity, Lo
     StockPriceEntity findTopByStockSymbolOrderByTimestampDesc(String stockSymbol);
 
     int countByStockSymbol(String stockSymbol);
+
+    void deleteByStockId(Long stockId);
 }
