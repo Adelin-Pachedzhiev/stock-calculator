@@ -58,7 +58,7 @@ public class StockPricePersister {
         }));
     }
 
-    private void getPriceAndSaveToDb(Stock stock) {
+    public void getPriceAndSaveToDb(Stock stock) {
         stockPriceApiClient.getPriceForSymbol(stock.getSymbol())
                 .map(price -> createStockPriceEntity(stock, price))
                 .ifPresent(stockPriceRepository::save);
