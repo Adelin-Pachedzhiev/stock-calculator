@@ -17,6 +17,7 @@ public class Stock {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String symbol;
     private String name;
     @Column(length = 1000)
