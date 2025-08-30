@@ -2,6 +2,9 @@ package org.example.stockcalculator.transaction.service;
 
 import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.example.stockcalculator.entity.StockTransaction;
 import org.example.stockcalculator.entity.UserAccount;
 import org.example.stockcalculator.transaction.dto.TransactionPayload;
@@ -17,6 +20,19 @@ public class StockTransactionService {
 
     private final StockTransactionRepository stockTransactionRepository;
     private final StockTransactionMapper stockTransactionMapper;
+
+    public List<StockTransaction> getAllTransactions(String symbol) {
+        Long userId = currentUserId();
+
+        if (symbol == null) {
+            return stockTransactionRepository.findByUserIdOrderByTimeOfTransactionDesc(userId);
+        }
+        return stockTransactionRepository.findByUserIdAndStockSymbolOrderByTimeOfTransactionDesc(userId, symbol.toUpperCase());
+    }
+
+    public Optional<StockTransaction> getTransactionById(Long transactionId) {
+        return stockTransactionRepository.findById(transactionId);
+    }
 
     public void saveStockTransaction(TransactionPayload stockTransaction) {
         StockTransaction stockTransactionEntity = stockTransactionMapper.toEntity(stockTransaction);
