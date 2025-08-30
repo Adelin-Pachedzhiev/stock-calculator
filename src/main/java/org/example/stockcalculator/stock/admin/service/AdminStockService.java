@@ -35,6 +35,7 @@ public class AdminStockService {
     @Transactional
     public Stock updateStock(Long id, Stock updatedStock) {
         checkIfStockSymbolIsValid(updatedStock.getSymbol());
+        checkIfStockSymbolIsDoesNotExist(updatedStock.getSymbol());
 
         Stock stock = stockRepository.findById(id)
                 .map(existingStock -> {
@@ -53,6 +54,7 @@ public class AdminStockService {
     @Transactional
     public Stock createStock(Stock stock) {
         checkIfStockSymbolIsValid(stock.getSymbol());
+        checkIfStockSymbolIsDoesNotExist(stock.getSymbol());
 
         stock.setId(null);
         Stock savedStock = stockRepository.save(stock);
@@ -77,6 +79,12 @@ public class AdminStockService {
     private void checkIfStockSymbolIsValid(String symbol) {
         if (!stockPriceApiClient.isSymbolSupported(symbol)) {
             throw new IllegalArgumentException("Stock symbol " + symbol + " is not a valid company symbol.");
+        }
+    }
+
+    private void checkIfStockSymbolIsDoesNotExist(String symbol) {
+        if (stockRepository.findBySymbol(symbol).isPresent()) {
+            throw new IllegalArgumentException("Stock with symbol " + symbol + " already exists.");
         }
     }
 }
