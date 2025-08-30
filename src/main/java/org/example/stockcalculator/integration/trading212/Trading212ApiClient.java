@@ -1,6 +1,6 @@
 package org.example.stockcalculator.integration.trading212;
 
-import static org.example.stockcalculator.util.ResilientApiCallUtil.executeWithRetryOn529;
+import static org.example.stockcalculator.util.ResilientApiCallUtil.executeWithRetryOn429;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -75,7 +75,7 @@ public class Trading212ApiClient {
 
         String url = apiProperties.url() + INSTRUMENTS_METADATA_PATH;
 
-        return executeWithRetryOn529(
+        return executeWithRetryOn429(
                 () -> restTemplate.exchange(url, GET, new HttpEntity<>(headers), new ParameterizedTypeReference<List<Trading212InstrumentMetadata>>() {
 
                         })
@@ -85,7 +85,7 @@ public class Trading212ApiClient {
     public Trading212UserInfo getUserInfo(String secret) {
         HttpHeaders headers = createHeadersWithSecret(secret);
         String url = apiProperties.url() + USER_ACCOUNT_INFO_PATH;
-        return executeWithRetryOn529(() -> restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212UserInfo.class).getBody(), url);
+        return executeWithRetryOn429(() -> restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212UserInfo.class).getBody(), url);
     }
 
     public boolean isTokenValid(String secret) {
@@ -110,7 +110,7 @@ public class Trading212ApiClient {
 
         String url = apiProperties.url() + path;
 
-        return executeWithRetryOn529(() -> restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212TransactionsResponse.class).getBody(), url);
+        return executeWithRetryOn429(() -> restTemplate.exchange(url, GET, new HttpEntity<>(headers), Trading212TransactionsResponse.class).getBody(), url);
     }
 
     @NotNull

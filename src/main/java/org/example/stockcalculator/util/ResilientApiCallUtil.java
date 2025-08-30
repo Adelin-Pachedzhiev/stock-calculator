@@ -17,11 +17,11 @@ public class ResilientApiCallUtil {
 
     public static final int DEFAULT_MAX_RETRIES = 6;
 
-    public static <T> T executeWithRetryOn529(Supplier<T> action, Object info) {
-        return executeWithRetryOn529(action, DEFAULT_MAX_RETRIES, info);
+    public static <T> T executeWithRetryOn429(Supplier<T> action, Object info) {
+        return executeWithRetryOn429(action, DEFAULT_MAX_RETRIES, info);
     }
 
-    public static <T> T executeWithRetryOn529(Supplier<T> action, int maxRetries, Object info) {
+    public static <T> T executeWithRetryOn429(Supplier<T> action, int maxRetries, Object info) {
         int attempt = 0;
         while (attempt < maxRetries) {
             try {
@@ -30,7 +30,7 @@ public class ResilientApiCallUtil {
             catch (HttpClientErrorException e) {
                 if (e.getStatusCode().isSameCodeAs(TOO_MANY_REQUESTS)) {
                     attempt++;
-                    log.warn("Received 529 Too Many Requests from {}. Attempt {} of {}. Retrying in 10 seconds...", info, attempt, maxRetries);
+                    log.warn("Received 429 Too Many Requests from {}. Attempt {} of {}. Retrying in 10 seconds...", info, attempt, maxRetries);
                     sleepSilentlyForSeconds(10);
                 }
                 else {
