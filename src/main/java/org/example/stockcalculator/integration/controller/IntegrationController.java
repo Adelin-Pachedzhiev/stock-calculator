@@ -1,17 +1,11 @@
 package org.example.stockcalculator.integration.controller;
 
-import static org.example.stockcalculator.account.utils.AuthUtils.currentUserId;
-
 import java.util.List;
 
-import org.example.stockcalculator.entity.PlatformIntegration;
 import org.example.stockcalculator.integration.StockTransactionManager;
 import org.example.stockcalculator.integration.dto.PlatformIntegrationResponse;
-import org.example.stockcalculator.integration.repository.IntegrationSecretRepository;
-import org.example.stockcalculator.integration.repository.PlatformIntegrationJpaRepository;
-import org.example.stockcalculator.transaction.repository.StockTransactionRepository;
+import org.example.stockcalculator.integration.service.IntegrationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,37 +20,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class IntegrationController {
 
-    private final PlatformIntegrationJpaRepository integrationRepository;
+    private final IntegrationService integrationService;
     private final StockTransactionManager stockTransactionManager;
-    private final StockTransactionRepository stockTransactionRepository;
-    private final IntegrationSecretRepository integrationSecretRepository;
 
     @GetMapping
     public ResponseEntity<?> getIntegrations() {
-        Long userId = currentUserId();
-        List<PlatformIntegration> integrations = integrationRepository.findByUserAccountId(userId);
-        List<PlatformIntegrationResponse> responseList = integrations.stream()
-                .map(integration ->
-                        new PlatformIntegrationResponse(integration.getId(), integration.getPlatform(), integration.getLastSyncAt(), integration.getCreatedAt()))
-                .toList();
-
-        return ResponseEntity.ok(responseList);
+        List<PlatformIntegrationResponse> integrations = integrationService.getUserIntegrations();
+        return ResponseEntity.ok(integrations);
     }
 
     @PostMapping("/{integrationId}/sync")
     public ResponseEntity<?> syncTransaction(@PathVariable Long integrationId) {
         stockTransactionManager.syncTransactionsToDbForIntegration(integrationId);
-
         return ResponseEntity.ok(integrationId);
     }
 
     @DeleteMapping("/{integrationId}")
-    @Transactional
     public ResponseEntity<?> deleteIntegration(@PathVariable Long integrationId) {
-        stockTransactionRepository.deleteByPlatformIntegrationId(integrationId);
-        integrationSecretRepository.deleteByIntegrationId(integrationId);
-        integrationRepository.deleteById(integrationId);
-
+        integrationService.deleteIntegration(integrationId);
         return ResponseEntity.ok(integrationId);
     }
 }
